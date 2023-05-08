@@ -1,4 +1,4 @@
-# Apollon
+# Apollon 🎸
 
 This project aims to give users a concise way to view their spotify activities.
 
