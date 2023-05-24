@@ -9,7 +9,7 @@ export default function Home() {
   return (
       <div className="">
         <button onClick={() => {
-          validatedTestingAction({ stuff: "test" }).then((response) => setMsg(response.message));
+          validatedTestingAction({ stuff: "hal" }).then((response) => setMsg(response.message));
         }}>
           Run server action
         </button>
