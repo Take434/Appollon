@@ -15,3 +15,22 @@ model User {
   email String
   name  String
 }
+
+model Song {
+  id    String @id 
+  title String
+  //artist User
+  duration_ms Int 
+  instrumentalness Float
+  loudness Float
+  tempo Float
+  danceability Float
+  energy Float
+  valence Float
+}
+
+model Artist {
+  id  String @id
+  name String
+
+}
