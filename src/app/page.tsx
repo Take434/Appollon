@@ -7,7 +7,7 @@ export default function Home() {
   const [msg, setMsg] = useState<string>("nothing here yet");
 
   return (
-      <div className="">
+      <div>
         <button onClick={() => {
           validatedTestingAction({ stuff: "hallihallo" }).then((response) => setMsg(response.message));
         }}>
