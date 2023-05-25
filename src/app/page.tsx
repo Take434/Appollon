@@ -1,7 +1,6 @@
 "use client";
 
 import { validatedTestingAction } from '@/server-actions/test.action';
-import Image from 'next/image'
 import { useState } from 'react';
 
 export default function Home() {
@@ -10,12 +9,12 @@ export default function Home() {
   return (
       <div>
         <button onClick={() => {
-          validatedTestingAction({ stuff: "test" }).then((response) => setMsg(response.message));
+          validatedTestingAction({ stuff: "hallihallo" }).then((response) => setMsg(response.message));
         }}>
-        Run server action
-      </button>
-      
-      <h1>{msg}</h1>
-    </div>
+          Run server action
+        </button>
+        
+        <h1>{msg}</h1>
+      </div>
   )
 }

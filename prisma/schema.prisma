@@ -6,6 +6,61 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String @id
+  email         String
+  name          String
+  playlists     Playlist[]
+  albums        Album[]
+  pfpLink       String
+  isAdmin       Boolean
+  refreshToken  String
+  token         String
+}
+
+model Track {
+  id                String @id 
+  title             String
+  album             Album @relation(fields: [albumId], references: [id])
+  albumId           String
+  addedTo           Playlist[]
+  duration_ms       Int 
+  instrumentalness  Float
+  loudness          Float
+  tempo             Float
+  danceability      Float
+  energy            Float
+  valence           Float
+}
+
+model Playlist {
+  id          String @id
+  title       String
+  coverLink   String
+  creatorName String
+  followers   User[]
+  tracks      Track[]
+}
+
+model Album {
+  id        String @id
+  title     String
+  release   DateTime
+  songCount Int
+  coverLink String
+  followers User[]
+  tracks    Track[]
+  artist    Artist @relation(fields: [artistId], references: [id])
+  artistId  String
+}
+
+model Artist {
+  id      String @id
+  name    String
+  albums  Album[] 
+  albumId String
 }
