@@ -1,8 +1,9 @@
 "use client";
 
 import { validatedTestingAction } from "@/server-actions/test.action";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 /**
  * The home page.
@@ -10,6 +11,11 @@ import React from "react";
  */
 export default function Home() {
   const [msg, setMsg] = useState<string>("nothing here yet");
+  const { push } = useRouter();
+
+  useEffect(() => {
+    push("/login");
+  }, [push]);
 
   return (
     <div>
