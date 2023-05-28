@@ -19,7 +19,11 @@ export default function Welcome() {
 
   return (
     <div>
-      <h1>Welcome</h1>
+      <h1>Welcome {profileData?.display_name}</h1>
+      <img src={profileData?.images[0].url} />
+
+      <p>Your data looks as follows: </p>
+      <br />
       {JSON.stringify(profileData)}
     </div>
   );
