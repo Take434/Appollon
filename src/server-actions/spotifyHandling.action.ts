@@ -3,7 +3,7 @@
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
 
-export const RedirectSpotifyAction = async (): Promise<string> => {
+export const RedirectSpotifyAction = async () => {
   const prisma = new PrismaClient();
 
   const validityState = crypto.randomBytes(32).toString("base64");
@@ -14,6 +14,8 @@ export const RedirectSpotifyAction = async (): Promise<string> => {
       timeStamp: new Date(),
     },
   });
+
+  prisma.$disconnect();
 
   const params = new URLSearchParams([
     ["client_id", process.env.SPOTIFY_CLIENT_ID!],
