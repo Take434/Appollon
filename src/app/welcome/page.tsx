@@ -28,7 +28,7 @@ export default function Welcome() {
   return (
     <div>
       <h1>Welcome {profileData?.display_name}</h1>
-      {profileData ? (
+      {profileData?.images.length ? (
         <Image
           src={profileData.images[0].url}
           alt="the users profile picture"

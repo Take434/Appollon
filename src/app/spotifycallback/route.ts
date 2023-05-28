@@ -80,7 +80,7 @@ export async function GET(request: Request) {
         id: meData.data.id,
         name: meData.data.display_name,
         email: meData.data.email,
-        pfpLink: meData.data.images[0].url,
+        pfpLink: meData.data.images[0]?.url ?? "ALL CAP NO PICTURE",
         token: Buffer.from(tokenData.data.access_token, "utf-8"),
         refreshToken: Buffer.from(tokenData.data.refresh_token, "utf-8"),
         isAdmin: false,
