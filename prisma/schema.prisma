@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ValidStates {
+  state     String @id
+  timeStamp DateTime
+}
+
 model User {
   id            String @id
   email         String
@@ -18,8 +23,8 @@ model User {
   albums        Album[]
   pfpLink       String
   isAdmin       Boolean
-  refreshToken  String
-  token         String
+  refreshToken  Bytes//tokens stored as utf8 encoded strings because of length limitations
+  token         Bytes
 }
 
 model Track {

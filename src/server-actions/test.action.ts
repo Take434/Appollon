@@ -1,23 +1,30 @@
 "use server";
 
-import { z } from "zod";
-import { zact } from "zact/server";
-import { PrismaClient } from "@prisma/client";
+import axios from "axios";
+import { meResponseSchema } from "@/types/spotifyAuthTypes";
+import { cookies } from "next/headers";
 
-/**
- * This is a test action that is used to test the server side actions.
- * @param input - The input to the action.
- * @returns The output of the action.
- */
-export const validatedTestingAction = zact(
-  z.object({ stuff: z.string().min(3) })
-)(async (input) => {
-  const prisma = new PrismaClient();
-  const jonas = await prisma.user.findFirst({
-    where: {
-      name: "JONAS",
+export const testingAction = async () => {
+  "use server";
+
+  const token = cookies().get("token")?.value;
+
+  if (!token) {
+    return "No token found";
+  }
+
+  const res = await axios.get("https://api.spotify.com/v1/me", {
+    headers: {
+      Authorization: "Bearer " + token,
     },
   });
 
-  return { message: `hello ${jonas?.email}  ${input.stuff}` };
-});
+  const parsedData = meResponseSchema.safeParse(res.data);
+
+  if (!parsedData.success) {
+    console.error(parsedData.error.flatten());
+    return;
+  }
+
+  return parsedData.data;
+};
