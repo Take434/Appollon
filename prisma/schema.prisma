@@ -52,6 +52,7 @@ model Album {
   release   DateTime
   songCount Int
   coverLink String
+  type      String
   followers User[]
   tracks    Track[]
   artist    Artist @relation(fields: [artistId], references: [id])
