@@ -8,16 +8,21 @@ export async function GET(request: Request) {
   const prisma = new PrismaClient();
 
   const validityState = new URLSearchParams(request.url.split("?")[1]);
+  const dbValidityState = await prisma.validStates.findUnique({
+    where: { state: validityState.get("state")! },
+  });
 
   //check if the state provided by spotify is valid
-  if (
-    !(await prisma.validStates.findUnique({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      where: { state: validityState.get("state")! },
-    }))
-  ) {
+  if (!dbValidityState) {
     console.error("Invalid state");
+
+    prisma.$disconnect();
+    return;
   }
+
+  await prisma.validStates.delete({
+    where: { state: dbValidityState.state },
+  });
 
   //get the token from spotify
   const tokenRes = await Axios.post(
@@ -49,6 +54,8 @@ export async function GET(request: Request) {
   //check if the token-response is valid
   if (!tokenData.success) {
     console.error(tokenData.error.flatten());
+
+    prisma.$disconnect();
     return;
   }
 
@@ -65,6 +72,8 @@ export async function GET(request: Request) {
   //check if the me-response is valid
   if (!meData.success) {
     console.error(meData.error.flatten());
+
+    prisma.$disconnect();
     return;
   }
 
@@ -86,20 +95,16 @@ export async function GET(request: Request) {
         isAdmin: false,
       },
     });
-
-    return;
+  } else {
+    //if the user is already in the database, update the token
+    await prisma.user.update({
+      where: { id: meData.data.id },
+      data: {
+        token: Buffer.from(tokenData.data.access_token, "utf-8"),
+        refreshToken: Buffer.from(tokenData.data.refresh_token, "utf-8"),
+      },
+    });
   }
-
-  //if the user is already in the database, update the token
-  await prisma.user.update({
-    where: { id: meData.data.id },
-    data: {
-      token: Buffer.from(tokenData.data.access_token, "utf-8"),
-      refreshToken: Buffer.from(tokenData.data.refresh_token, "utf-8"),
-    },
-  });
-
-  prisma.$disconnect();
 
   const answ = NextResponse.redirect(`http:localhost:3000/welcome`);
   answ.cookies.set("token", tokenData.data.access_token, {
@@ -110,5 +115,6 @@ export async function GET(request: Request) {
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
+  prisma.$disconnect();
   return answ;
 }
