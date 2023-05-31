@@ -1,11 +1,9 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../prismaClient";
 import crypto from "crypto";
 
 export const RedirectSpotifyAction = async () => {
-  const prisma = new PrismaClient();
-
   const validityState = crypto.randomBytes(32).toString("base64");
 
   await prisma.validStates.create({
@@ -14,8 +12,6 @@ export const RedirectSpotifyAction = async () => {
       timeStamp: new Date(),
     },
   });
-
-  prisma.$disconnect();
 
   const params = new URLSearchParams([
     ["client_id", process.env.SPOTIFY_CLIENT_ID!],
