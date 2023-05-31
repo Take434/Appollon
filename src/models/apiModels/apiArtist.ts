@@ -3,8 +3,8 @@ import { z } from "zod";
 export const apiArtist = z.object({
   followers: z.object({
     total: z.number(),
-  }),
-  genres: z.string().array().nullable(),
+  }).nullish(),
+  genres: z.string().array().nullish(),
   id: z.string(),
   name: z.string(),
 });
