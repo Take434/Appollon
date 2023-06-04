@@ -1,9 +1,10 @@
 "use server";
 
-import { prisma } from "../prismaClient";
+import { getClient } from "../prismaClient";
 import crypto from "crypto";
 
 export const RedirectSpotifyAction = async () => {
+  const prisma = getClient();
   const validityState = crypto.randomBytes(32).toString("base64");
 
   await prisma.validStates.create({
