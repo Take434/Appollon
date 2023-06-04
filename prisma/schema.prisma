@@ -23,8 +23,8 @@ model User {
   albums        Album[]
   pfpLink       String
   isAdmin       Boolean
-  refreshToken  Bytes//tokens stored as utf8 encoded strings because of length limitations
-  token         Bytes
+  refreshToken  String @db.Text
+  token         String @db.Text
 }
 
 model Track {

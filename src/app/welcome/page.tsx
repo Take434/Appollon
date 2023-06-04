@@ -15,14 +15,16 @@ export default function Welcome() {
   const { push } = useRouter();
 
   useEffect(() => {
-    testingAction().then((data) => {
-      if (data === "No token found") {
-        console.log("No token found");
-        push("/login");
-        return;
-      }
-      setProfileData(data as z.infer<typeof meResponseSchema>);
-    });
+    // testingAction().then((data) => {
+    //   if (data === "No token found") {
+    //     console.log("No token found");
+    //     push("/login");
+    //     return;
+    //   }
+    //   setProfileData(data as z.infer<typeof meResponseSchema>);
+    // });
+
+    testingAction();
   }, [push]);
 
   return (
