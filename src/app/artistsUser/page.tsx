@@ -3,7 +3,8 @@
 import { apiArtist } from "@/models/apiModels/apiArtist";
 import { apiArtistsObject } from "@/models/apiModels/apiArtistsObject";
 import { apiSavedTracks } from "@/models/apiModels/apiSavedTracks";
-import { apiTestingAction, apiUserArtistsAction, getSavedTracks } from "@/server-actions/apiTest.action";
+import { apiTrackAudioFeatures } from "@/models/apiModels/apiTrackAudioFeatures";
+import { apiTestingAction, apiTrackAudioFeaturesForSavedTracks, apiUserArtistsAction, getSavedTracks } from "@/server-actions/apiTest.action";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -16,6 +17,8 @@ export default function Home() {
   typeof apiArtist
   > | z.infer<
   typeof apiSavedTracks
+  > | z.infer<
+  typeof apiTrackAudioFeatures
   > | null>(null);
 
   const { push } = useRouter();
@@ -53,6 +56,16 @@ export default function Home() {
           setDisplayData(data as z.infer<typeof apiSavedTracks>);
         });
       }}>savedTracks</button>
+      <button onClick={() => {
+        apiTrackAudioFeaturesForSavedTracks().then((data) => {
+          if (data === "No token found") {
+            console.log("No token found");
+            push("/login");
+            return;
+          }
+          setDisplayData(data as z.infer<typeof apiTrackAudioFeatures>);
+        });
+      }}>savedTracksAudioFeatures</button>
       <br/>
       { JSON.stringify(displayData)}
     </div>

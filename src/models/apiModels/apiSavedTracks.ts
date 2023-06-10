@@ -7,4 +7,7 @@ export const apiSavedTracks = z.object({
             track: apiTrack,
         })
     ),
+    // total: z.number(),
+    // offset: z.number(),
+    // limit: z.number(),
 });
