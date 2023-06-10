@@ -1,23 +1,26 @@
-import { PrismaClient } from "@prisma/client";
+import { getClient } from "../../prismaClient";
 import Axios from "axios";
 import { NextResponse } from "next/server";
 import { meResponseSchema } from "../../types/spotifyAuthTypes";
 import { firstTokenResponseSchema } from "../../types/spotifyAuthTypes";
 
 export async function GET(request: Request) {
-  const prisma = new PrismaClient();
+  const prisma = getClient();
+  const urlParams = new URL(request.url).searchParams;
 
-  const validityState = new URLSearchParams(request.url.split("?")[1]);
+  if (!urlParams.get("state")) {
+    console.error("No state provided");
+    return new Response("No state provided", { status: 400 });
+  }
+
   const dbValidityState = await prisma.validStates.findUnique({
-    where: { state: validityState.get("state")! },
+    where: { state: urlParams.get("state")! },
   });
 
   //check if the state provided by spotify is valid
   if (!dbValidityState) {
     console.error("Invalid state");
-
-    prisma.$disconnect();
-    return;
+    return new Response("Invalid state", { status: 400 });
   }
 
   await prisma.validStates.delete({
@@ -30,7 +33,7 @@ export async function GET(request: Request) {
     new URLSearchParams([
       ["client_id", process.env.SPOTIFY_CLIENT_ID!],
       ["grant_type", "authorization_code"],
-      ["code", validityState.get("code")!],
+      ["code", urlParams.get("code")!],
       ["redirect_uri", process.env.SPOTIFY_REDIRECT_URI!],
     ]).toString(),
     {
@@ -54,9 +57,9 @@ export async function GET(request: Request) {
   //check if the token-response is valid
   if (!tokenData.success) {
     console.error(tokenData.error.flatten());
-
-    prisma.$disconnect();
-    return;
+    return new Response("Spotify request to get tokens failed", {
+      status: 500,
+    });
   }
 
   const meRes = await Axios.get("https://api.spotify.com/v1/me", {
@@ -72,9 +75,9 @@ export async function GET(request: Request) {
   //check if the me-response is valid
   if (!meData.success) {
     console.error(meData.error.flatten());
-
-    prisma.$disconnect();
-    return;
+    return new Response("Spotify request to get user data failed", {
+      status: 500,
+    });
   }
 
   //check if the user is already in the database
@@ -107,6 +110,13 @@ export async function GET(request: Request) {
   }
 
   const answ = NextResponse.redirect(`http:localhost:3000/welcome`);
+
+  const cookie = answ.cookies.get("token");
+
+  if (cookie) {
+    answ.cookies.delete("token");
+  }
+
   answ.cookies.set("token", tokenData.data.access_token, {
     httpOnly: true,
     path: "/",
@@ -115,6 +125,5 @@ export async function GET(request: Request) {
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
-  prisma.$disconnect();
   return answ;
 }
