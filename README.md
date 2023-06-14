@@ -16,6 +16,10 @@ If you clone this repository make sure to run `pnpm install`.
 You will also need Docker to setup the database.  
 In addition you need to add a .env file and provide the following:  
 - `DATABSE_URL`
+- `SPOTIFY_CLIENT_ID`
+- `SPOTIFY_CLIENT_SECRET`
+- `SPOTIFY_REDIRECT_URI`
+- `SPOTIFY_SCOPE`
 
 
 ### Related Docs
