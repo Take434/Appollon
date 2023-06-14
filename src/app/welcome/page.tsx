@@ -9,9 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Welcome() {
-  const [profileData, setProfileData] = useState<z.infer<
-    typeof meResponseSchema
-  > | null>(null);
+  const [profileData] = useState<z.infer<typeof meResponseSchema> | null>(null);
   const { push } = useRouter();
 
   useEffect(() => {

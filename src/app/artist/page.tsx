@@ -1,13 +1,12 @@
 "use client";
 
 import { apiArtist } from "@/models/apiModels/apiArtist";
-import { apiTestingAction, apiUserArtistsAction } from "@/server-actions/apiTest.action";
+import { apiTestingAction } from "@/server-actions/apiTest.action";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 
 export default function Home() {
-
   const [artistData, setArtistData] = useState<z.infer<
     typeof apiArtist
   > | null>(null);
@@ -26,7 +25,7 @@ export default function Home() {
 
   return (
     <div>
-      <br/>
+      <br />
       {JSON.stringify(artistData)}
     </div>
   );
