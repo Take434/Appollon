@@ -28,5 +28,5 @@ export const trackAnalysis = async () => {
     duration_ms += af.duration_ms;
   });
 
-  return  (duration_ms / audioFeatures.length / 1000);
+  return duration_ms / audioFeatures.length / 1000;
 };
