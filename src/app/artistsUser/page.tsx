@@ -43,7 +43,8 @@ export default function Home() {
         }}
       >
         artistsUser
-      </button>trackAnalysis
+      </button>
+      trackAnalysis
       <button
         onClick={() => {
           apiTestingAction().then((data) => {

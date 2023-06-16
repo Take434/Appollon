@@ -1,17 +1,19 @@
 "use server";
 
 import { savedTracks } from "@/models/models/savedTracks";
-import { Playlist } from "@prisma/client";
+import { Playlist, Track } from "@prisma/client";
+import { getClient } from "../../prismaClient";
 import axios from "axios";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { PlaylistWithTracks } from "@/models/dbModels/dbModels";
 
-const apiSimplePlaylist = z.object({
+const apiSimplifiedPlaylistObject = z.object({
   id: z.string(),
-  title: z.string(),
+  name: z.string(),
   images: z.object({
     url: z.string(),
-  }),
+  }).array(),
   owner: z.object({
     display_name: z.string(),
   }),
@@ -20,11 +22,11 @@ const apiSimplePlaylist = z.object({
   }),
 });
 
-const apiPlaylist = z.object({
+const apiPlaylistResponse = z.object({
   limit: z.number(),
   offset: z.number(),
   total: z.number(),
-  items: z.array(apiSimplePlaylist),
+  items: z.array(apiSimplifiedPlaylistObject),
 });
 
 export const getPlaylistsForUser = async () => {
@@ -36,7 +38,7 @@ export const getPlaylistsForUser = async () => {
     return "No token found";
   }
 
-  const apiCall = await axios.get<z.infer<typeof apiPlaylist>>(
+  const apiCall = await axios.get<z.infer<typeof apiPlaylistResponse>>(
     "https://api.spotify.com/v1/me/playlists",
     {
       headers: {
@@ -61,7 +63,7 @@ export const getPlaylistsForUser = async () => {
         ? 50
         : totalPlaylistCount - currentPlaylistCount;
 
-    const res = await axios.get<z.infer<typeof apiPlaylist>>(
+    const res = await axios.get<z.infer<typeof apiPlaylistResponse>>(
       "https://api.spotify.com/v1/me/playlists",
       {
         headers: {
@@ -77,8 +79,10 @@ export const getPlaylistsForUser = async () => {
 
     playlistsArray.push(...res.data.items.map(pA => {
       const playlist: Playlist = {
-        coverLink: pA.images ,
-
+        coverLink: pA.images[0].url,
+        creatorName: pA.owner.display_name,
+        id: pA.id,
+        title: pA.name,
       }
       return playlist;
     }));
