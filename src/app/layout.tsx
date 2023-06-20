@@ -21,7 +21,11 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={(inter.className, "flex flex-col h-screen bg-linear-gradient w-full")}>
+      <body
+        className={
+          (inter.className, "flex flex-col h-screen bg-linear-gradient w-full")
+        }
+      >
         {children}
       </body>
     </html>
