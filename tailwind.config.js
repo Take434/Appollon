@@ -1,4 +1,8 @@
+/* eslint-disable */
 /** @type {import('tailwindcss').Config} */
+
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,13 +12,10 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'linear-gradient': 'linear-gradient(var(--color-background-first), var(--color-background-second))',
       },
       colors: {
-        background: 'var(--color-background)',
+        background: 'var(--color-background-first)',
         primary: 'var(--color-primary)',
         secondary: {
           100: 'var(--color-secondary-100)',
@@ -61,5 +62,20 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addUtilities, addComponents, e, prefix, config }) {
+      const newUtilities = {
+        '.horizontal-tb': {
+          writingMode: 'horizontal-tb',
+        },
+        '.vertical-rl': {
+          writingMode: 'vertical-rl'
+        },
+        '.vertical-lr': {
+          writingMode: 'vertical-lr'
+        }
+      }
+      addUtilities(newUtilities)
+    })
+  ],
 }
