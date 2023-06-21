@@ -5,7 +5,6 @@ import { apiArtistsObject } from "@/models/apiModels/apiArtistsObject";
 import { apiSavedTracks } from "@/models/apiModels/apiSavedTracks";
 import { apiTrack } from "@/models/apiModels/apiTrack";
 import { apiTrackAudioFeatures } from "@/models/apiModels/apiTrackAudioFeatures";
-import { trackAudioFeatures } from "@/models/models/trackAudioFeatures";
 import axios from "axios";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -63,32 +62,32 @@ export const apiUserArtistsAction = async () => {
 
 }
 
-// export const apiTrackAudioFeaturesForPlaylist = async (playlistId: string) => {
-//   "use server";
+export const apiTrackAudioFeaturesForPlaylist = async (playlistId: string) => {
+  "use server";
 
-//   const token = cookies().get("token")?.value;
+  const token = cookies().get("token")?.value;
 
-//   if (!token) {
-//     return "No token found";
-//   }
+  if (!token) {
+    return "No token found";
+  }
 
-//   const res = await axios.get("https://api.spotify.com/v1/me/following?type=artist", {
-//     headers: {
-//       Authorization: "Bearer " + token,
-//     },
-//   });
+  const res = await axios.get("https://api.spotify.com/v1/me/following?type=artist", {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
 
-//   const parsedData = apiArtistsObject.safeParse(res.data);
+  const parsedData = apiArtistsObject.safeParse(res.data);
 
-//   console.log(parsedData.success ? parsedData.data : "");
+  console.log(parsedData.success ? parsedData.data : "");
 
-//   if (!parsedData.success) {
-//     console.error(parsedData.error.flatten());
-//     return;
-//   }
+  if (!parsedData.success) {
+    console.error(parsedData.error.flatten());
+    return;
+  }
 
-//   return parsedData.data;
-// }
+  return parsedData.data;
+}
 
 export const getSavedTracks = async () => {
   "use server";
@@ -110,6 +109,8 @@ export const getSavedTracks = async () => {
     }
   });
 
+  const parsedTracks: z.infer<typeof apiSavedTracks> = {items: []};
+
   const totalTrackCount = res.data.total;
   let currentTrackCount = 0;
 
@@ -117,7 +118,7 @@ export const getSavedTracks = async () => {
 
     const currentTrackLimit = totalTrackCount - currentTrackCount > 50 ? 50 : totalTrackCount - currentTrackCount;
 
-    const apiRes = await axios.get("https://api.spotify.com/v1/me/tracks", {
+    const apiRes = await axios.get<z.infer<typeof apiSavedTracks>>("https://api.spotify.com/v1/me/tracks", {
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -128,14 +129,7 @@ export const getSavedTracks = async () => {
     }
   });
 
-  res.data.items = res.data.items.concat(apiRes.data.items);
-  currentTrackCount += currentTrackLimit;
-
-  }
-
-  console.log(JSON.stringify(res.data.total));
-
-  const parsedData = apiSavedTracks.safeParse(res.data);
+  const parsedData = apiSavedTracks.safeParse(apiRes.data);
 
   if (!parsedData.success) {
     console.log(parsedData.error)
@@ -143,7 +137,12 @@ export const getSavedTracks = async () => {
     return;
   }
 
-  return parsedData.data;
+  parsedTracks.items.push(...parsedData.data.items);
+  currentTrackCount += currentTrackLimit;
+
+  }
+
+  return parsedTracks;
 }
 
 export const apiTrackAudioFeaturesForSavedTracks = async () => {
@@ -160,8 +159,6 @@ export const apiTrackAudioFeaturesForSavedTracks = async () => {
     }
   });
 
-  console.log("test1: " + trackIds.length);
-
   const token = cookies().get("token")?.value;
 
   if (!token) {
@@ -169,8 +166,8 @@ export const apiTrackAudioFeaturesForSavedTracks = async () => {
   }
 
   let currentTrackCount = 0;
+  const parsedTracks: z.infer<typeof apiTrackAudioFeatures> = [];
   const totalTrackCount = trackIds.length;
-  let res: trackAudioFeatures[] = [];
 
   while(totalTrackCount > currentTrackCount) {
 
@@ -178,7 +175,7 @@ export const apiTrackAudioFeaturesForSavedTracks = async () => {
     const currentIds = trackIds.slice(currentTrackCount, currentTrackLimit + currentTrackCount);
     console.log(currentIds.toString());
 
-    const apiRes = await axios.get("https://api.spotify.com/v1/audio-features", {
+    const apiRes = await axios.get<{audio_features: z.infer<typeof apiTrackAudioFeatures>}>("https://api.spotify.com/v1/audio-features", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -187,20 +184,17 @@ export const apiTrackAudioFeaturesForSavedTracks = async () => {
       }
     });
 
-    res = res.concat(apiRes.data.audio_features);
-
-    currentTrackCount += 100;
-    console.log(currentTrackLimit);
-  }
-
-  const parsedData = apiTrackAudioFeatures.safeParse(res);
-
-  console.log(parsedData.success ? parsedData.data : "");
+    const parsedData = apiTrackAudioFeatures.safeParse(apiRes.data.audio_features);
 
   if (!parsedData.success) {
     console.error(parsedData.error.flatten());
     return;
   }
 
-  return parsedData.data;
+    parsedTracks.push(...parsedData.data);
+
+    currentTrackCount += 100;
+  }
+
+  return parsedTracks;
 }

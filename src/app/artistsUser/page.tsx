@@ -68,6 +68,8 @@ export default function Home() {
       }}>savedTracksAudioFeatures</button>
       <br/>
       { JSON.stringify(displayData)}
+      <br/>
+      {displayData ? Object.keys(displayData).length : ""}
     </div>
   );
 }

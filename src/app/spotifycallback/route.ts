@@ -93,8 +93,8 @@ export async function GET(request: Request) {
         name: meData.data.display_name,
         email: meData.data.email,
         pfpLink: meData.data.images[0]?.url ?? "ALL CAP NO PICTURE",
-        token: Buffer.from(tokenData.data.access_token, "utf-8"),
-        refreshToken: Buffer.from(tokenData.data.refresh_token, "utf-8"),
+        token: tokenData.data.access_token,
+        refreshToken: tokenData.data.refresh_token,
         isAdmin: false,
       },
     });
@@ -103,8 +103,8 @@ export async function GET(request: Request) {
     await prisma.user.update({
       where: { id: meData.data.id },
       data: {
-        token: Buffer.from(tokenData.data.access_token, "utf-8"),
-        refreshToken: Buffer.from(tokenData.data.refresh_token, "utf-8"),
+        token: tokenData.data.access_token,
+        refreshToken: tokenData.data.refresh_token,
       },
     });
   }
