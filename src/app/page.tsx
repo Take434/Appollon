@@ -4,10 +4,6 @@ import { useEffect } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-/**
- * The home page.
- * @returns The home page.
- */
 export default function Home() {
   const { push } = useRouter();
 

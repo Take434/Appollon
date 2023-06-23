@@ -6,31 +6,45 @@ import {
   ListIcon,
   PieChartIcon,
 } from "@/components/icons/Heroicons";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export const Navbar = () => {
   const [active, setActive] = React.useState<number>(0);
+  const { push } = useRouter();
 
   return (
     <div className="fixed bottom-0 w-full">
       <div className="flex justify-evenly text-textDark border-t-2 border-textDark bg-background pb-2">
         <NavBarIcon
-          navFunc={() => setActive(0)}
+          navFunc={() => {
+            push("/home");
+            setActive(0);
+          }}
           isActive={active === 0}
           Icon={<HomeIcon className="w-10 h-10" />}
         />
         <NavBarIcon
-          navFunc={() => setActive(1)}
+          navFunc={() => {
+            push("/personalStats");
+            setActive(1);
+          }}
           isActive={active === 1}
           Icon={<PieChartIcon className="w-10 h-10" />}
         />
         <NavBarIcon
-          navFunc={() => setActive(2)}
+          navFunc={() => {
+            push("/playlistOverview");
+            setActive(2);
+          }}
           isActive={active === 2}
           Icon={<ListIcon className="w-10 h-10" />}
         />
         <NavBarIcon
-          navFunc={() => setActive(3)}
+          navFunc={() => {
+            push("/listeningActivity");
+            setActive(3);
+          }}
           isActive={active === 3}
           Icon={<CalenderIcon className="w-10 h-10" />}
         />

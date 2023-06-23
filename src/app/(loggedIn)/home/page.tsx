@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ExternalLink } from "@/components/icons/Heroicons";
-import { SmallPlaylistPreview } from "@/app/(loggedIn)/welcome/SmallPlaylistPreview";
+import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
