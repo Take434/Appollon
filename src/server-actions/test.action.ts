@@ -1,7 +1,5 @@
 "use server";
 
-import axios from "axios";
-import { meResponseSchema } from "@/types/spotifyAuthTypes";
 import { cookies } from "next/headers";
 import { refreshSpotifyToken } from "@/server-actions/spotifyHandling.action";
 

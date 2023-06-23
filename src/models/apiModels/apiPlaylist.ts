@@ -7,10 +7,10 @@ export const apiPlaylist = z.object({
   name: z.string(),
   images: z.object({
     url: z.string(),
-  }),
+  }).array(),
   owner: z.object({
     display_name: z.string(),
   }),
-  followers: apiUser.array(),
+  followers: z.array(apiUser),
   tracks: apiTrack.array(),
 });
