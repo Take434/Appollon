@@ -1,10 +1,22 @@
 "use server";
 
-import { apiSavedTracks } from "@/models/apiModels/apiSavedTracks";
+import { apiSavedTrack } from "@/models/apiModels/apiSavedTrack";
+import { apiTrack } from "@/models/apiModels/apiTrack";
 import { savedTracks } from "@/models/models/savedTracks";
 import axios from "axios";
 import { cookies } from "next/headers";
 import { z } from "zod";
+
+const apiSavedTracksResponse = z.object({
+  limit: z.number(),
+  offset: z.number(),
+  total: z.number(),
+  items: z.array(
+    z.object({
+      track: apiTrack
+    })
+  )
+});
 
 export const getSavedTracks = async () => {
   "use server";
@@ -15,7 +27,7 @@ export const getSavedTracks = async () => {
     return "No token found";
   }
 
-  const apiCall = await axios.get("https://api.spotify.com/v1/me/tracks", {
+  const apiCall = await axios.get<z.infer<typeof apiSavedTracksResponse>>("https://api.spotify.com/v1/me/tracks", {
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -37,7 +49,7 @@ export const getSavedTracks = async () => {
         ? 50
         : totalTrackCount - currentTrackCount;
 
-    const res = await axios.get<z.infer<typeof apiSavedTracks>>(
+    const res = await axios.get<z.infer<typeof apiSavedTracksResponse>>(
       "https://api.spotify.com/v1/me/tracks",
       {
         headers: {

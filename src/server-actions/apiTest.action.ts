@@ -2,10 +2,11 @@
 
 import { apiArtist } from "@/models/apiModels/apiArtist";
 import { apiArtistsObject } from "@/models/apiModels/apiArtistsObject";
-import { apiSavedTracks } from "@/models/apiModels/apiSavedTracks";
+import { apiSavedTracks } from "@/models/apiModels/apiSavedTrack";
 import { apiTrackAudioFeatures } from "@/models/apiModels/apiTrackAudioFeatures";
 import axios from "axios";
 import { cookies } from "next/headers";
+import { z } from "zod";
 
 export const apiTestingAction = async () => {
   "use server";
@@ -92,152 +93,123 @@ export const apiTrackAudioFeaturesForPlaylist = async (playlistId: string) => {
   return parsedData.data;
 }
 
-// export const apiTrackAudioFeaturesForPlaylist = async (playlistId: string) => {
+// export const getSavedTracks = async () => {
 //   "use server";
 
-  const token = cookies().get("token")?.value;
+//   const token = cookies().get("token")?.value;
 
-  if (!token) {
-    return "No token found";
-  }
+//   if (!token) {
+//     return "No token found";
+//   }
 
-  const res = await axios.get("https://api.spotify.com/v1/me/following?type=artist", {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+//   const res = await axios.get<z.infer<typeof apiSavedTracks>>("https://api.spotify.com/v1/me/tracks", {
+//     headers: {
+//       Authorization: "Bearer " + token,
+//     },
+//     params: {
+//       market: "GE",
+//       limit: 1,
+//       offset: 0,
+//     },
+//   });
 
-  const parsedData = apiArtistsObject.safeParse(res.data);
+//   const parsedTracks: z.infer<typeof apiSavedTracks>["items"] = [];
 
-  console.log(parsedData.success ? parsedData.data : "");
+//   const totalTrackCount = res.data.total;
+//   let currentTrackCount = 0;
 
-  if (!parsedData.success) {
-    console.error(parsedData.error.flatten());
-    return;
-  }
+//   while (totalTrackCount > currentTrackCount) {
+//     const currentTrackLimit =
+//       totalTrackCount - currentTrackCount > 50
+//         ? 50
+//         : totalTrackCount - currentTrackCount;
 
-  return parsedData.data;
-}
+//     const apiRes = await axios.get<z.infer<typeof apiSavedTracks>>("https://api.spotify.com/v1/me/tracks", {
+//       headers: {
+//         Authorization: "Bearer " + token,
+//       },
+//       params: {
+//         market: "GE",
+//         limit: currentTrackLimit,
+//         offset: currentTrackCount,
+//       },
+//     });
 
-export const getSavedTracks = async () => {
-  "use server";
+//   const parsedData = apiSavedTracks.safeParse(apiRes.data);
+//     res.data.items = res.data.items.concat(apiRes.data.items);
+//     currentTrackCount += currentTrackLimit;
+  
 
-  const token = cookies().get("token")?.value;
+//   console.log(JSON.stringify(res.data.total));
 
-  if (!token) {
-    return "No token found";
-  }
+//   if (!parsedData.success) {
+//     console.log(parsedData.error);
+//     console.error(parsedData.error.flatten());
+//     return;
+//   }
 
-  const res = await axios.get("https://api.spotify.com/v1/me/tracks", {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-    params: {
-      market: "GE",
-      limit: 1,
-      offset: 0,
-    },
-  });
+//   parsedTracks.items.push(...parsedData.data.items);
+//   currentTrackCount += currentTrackLimit;
 
-  const parsedTracks: z.infer<typeof apiSavedTracks> = {items: []};
+//   }
 
-  const totalTrackCount = res.data.total;
-  let currentTrackCount = 0;
+//   return parsedTracks;
+// }
 
-  while (totalTrackCount > currentTrackCount) {
-    const currentTrackLimit =
-      totalTrackCount - currentTrackCount > 50
-        ? 50
-        : totalTrackCount - currentTrackCount;
+// export const apiTrackAudioFeaturesForSavedTracks = async () => {
+//   "use server";
 
-    const apiRes = await axios.get<z.infer<typeof apiSavedTracks>>("https://api.spotify.com/v1/me/tracks", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-      params: {
-        market: "GE",
-        limit: currentTrackLimit,
-        offset: currentTrackCount,
-      },
-    });
+//   let trackIds: string[] = [];
 
-  const parsedData = apiSavedTracks.safeParse(apiRes.data);
-    res.data.items = res.data.items.concat(apiRes.data.items);
-    currentTrackCount += currentTrackLimit;
-  }
+//   await getSavedTracks().then((data) => {
+//     if (data === "No token found") {
+//       return;
+//     } else {
+//       trackIds = data!.items.map((item) => item.track.id);
+//     }
+//   });
 
-  console.log(JSON.stringify(res.data.total));
+//   const token = cookies().get("token")?.value;
 
-  const parsedData = apiSavedTracks.safeParse(res.data);
+//   if (!token) {
+//     return "No token found";
+//   }
 
-  if (!parsedData.success) {
-    console.log(parsedData.error);
-    console.error(parsedData.error.flatten());
-    return;
-  }
+//   let currentTrackCount = 0;
+//   const parsedTracks: z.infer<typeof apiTrackAudioFeatures> = [];
+//   const totalTrackCount = trackIds.length;
 
-  parsedTracks.items.push(...parsedData.data.items);
-  currentTrackCount += currentTrackLimit;
+//   while (totalTrackCount > currentTrackCount) {
+//     const currentTrackLimit =
+//       totalTrackCount - currentTrackCount > 100
+//         ? 100
+//         : totalTrackCount - currentTrackCount;
+//     const currentIds = trackIds.slice(
+//       currentTrackCount,
+//       currentTrackLimit + currentTrackCount
+//     );
+//     console.log(currentIds.toString());
 
-  }
+//     const apiRes = await axios.get<{audio_features: z.infer<typeof apiTrackAudioFeatures>}>("https://api.spotify.com/v1/audio-features", {
+//       headers: {
+//         Authorization: "Bearer " + token,
+//       },
+//       params: {
+//         ids: currentIds.toString(),
+//       }
+//     );
 
-  return parsedTracks;
-}
+//     const parsedData = apiTrackAudioFeatures.safeParse(apiRes.data.audio_features);
 
-export const apiTrackAudioFeaturesForSavedTracks = async () => {
-  "use server";
+//   if (!parsedData.success) {
+//     console.error(parsedData.error.flatten());
+//     return;
+//   }
 
-  let trackIds: string[] = [];
+//     parsedTracks.push(...parsedData.data);
 
-  await getSavedTracks().then((data) => {
-    if (data === "No token found") {
-      return;
-    } else {
-      trackIds = data!.items.map((item) => item.track.id);
-    }
-  });
+//     currentTrackCount += 100;
+//   }
 
-  const token = cookies().get("token")?.value;
-
-  if (!token) {
-    return "No token found";
-  }
-
-  let currentTrackCount = 0;
-  const parsedTracks: z.infer<typeof apiTrackAudioFeatures> = [];
-  const totalTrackCount = trackIds.length;
-
-  while (totalTrackCount > currentTrackCount) {
-    const currentTrackLimit =
-      totalTrackCount - currentTrackCount > 100
-        ? 100
-        : totalTrackCount - currentTrackCount;
-    const currentIds = trackIds.slice(
-      currentTrackCount,
-      currentTrackLimit + currentTrackCount
-    );
-    console.log(currentIds.toString());
-
-    const apiRes = await axios.get<{audio_features: z.infer<typeof apiTrackAudioFeatures>}>("https://api.spotify.com/v1/audio-features", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-      params: {
-        ids: currentIds.toString(),
-      }
-    );
-
-    const parsedData = apiTrackAudioFeatures.safeParse(apiRes.data.audio_features);
-
-  if (!parsedData.success) {
-    console.error(parsedData.error.flatten());
-    return;
-  }
-
-    parsedTracks.push(...parsedData.data);
-
-    currentTrackCount += 100;
-  }
-
-  return parsedTracks;
-}
+//   return parsedTracks;
+// }

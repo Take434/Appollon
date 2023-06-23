@@ -1,7 +1,7 @@
 "use server";
 
 import { audioFeaturesForTracks } from "../api-actions.ts/audioFeaturesForTracks.action";
-import { getSavedTracks } from "../api-actions.ts/savedTracks.action";
+import { getSavedTracks } from "../api-actions.ts/getSavedTracks.action";
 
 export const trackAnalysis = async () => {
   "use server";

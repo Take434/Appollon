@@ -7,20 +7,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { PlaylistWithTracks } from "@/models/dbModels/dbModels";
-
-const apiSimplifiedPlaylistObject = z.object({
-  id: z.string(),
-  name: z.string(),
-  images: z.object({
-    url: z.string(),
-  }).array(),
-  owner: z.object({
-    display_name: z.string(),
-  }),
-  tracks: z.object({
-    total: z.number(),
-  }),
-});
+import { apiSimplifiedPlaylistObject } from "@/models/apiModels/apiSimplifiedPlaylistObject";
 
 const apiPlaylistResponse = z.object({
   limit: z.number(),
@@ -77,9 +64,17 @@ export const getPlaylistsForUser = async () => {
       }
     );
 
-    playlistsArray.push(...res.data.items.map(pA => {
+    const parsedData = apiSimplifiedPlaylistObject.array().safeParse(res.data.items);
+
+    if (!parsedData.success) {
+      console.log(parsedData.error);
+      console.error(parsedData.error.flatten());
+      return;
+    }
+
+    playlistsArray.push(...parsedData.data.map(pA => {
       const playlist: Playlist = {
-        coverLink: pA.images[0].url,
+        coverLink: pA.images[0] ? pA.images[0].url : "",
         creatorName: pA.owner.display_name,
         id: pA.id,
         title: pA.name,
@@ -89,13 +84,32 @@ export const getPlaylistsForUser = async () => {
     currentPlaylistCount += currentTrackLimit;
   }
 
-  const parsedData = savedTracks.safeParse(playlistsArray);
+  //get the saved tracks as playlist
 
-  if (!parsedData.success) {
-    console.log(parsedData.error);
-    console.error(parsedData.error.flatten());
+  const prisma = getClient();
+
+  const currentUser = await prisma.user.findFirst({
+    where: {
+      token: token
+    },
+    include: {
+      playlists: true,
+    },
+  });
+
+  if(!currentUser) {
+    console.log("No user found");
     return;
   }
 
-  return parsedData.data;
+  const savedTracksPlaylist: Playlist = {
+    coverLink: "temp",
+    creatorName: currentUser.name,
+    id: "SAVEDTRACKS_" + currentUser.id ,
+    title: "Saved Tracks",
+  }
+
+  playlistsArray.push(savedTracksPlaylist);
+
+  return playlistsArray;
 };
