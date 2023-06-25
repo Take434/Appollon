@@ -78,6 +78,7 @@ export const getPlaylistsForUser = async () => {
         creatorName: pA.owner.display_name,
         id: pA.id,
         title: pA.name,
+        audio_FeaturesId: null
       }
       return playlist;
     }));
@@ -107,6 +108,7 @@ export const getPlaylistsForUser = async () => {
     creatorName: currentUser.name,
     id: "SAVEDTRACKS_" + currentUser.id ,
     title: "Saved Tracks",
+    audio_FeaturesId: null
   }
 
   playlistsArray.push(savedTracksPlaylist);

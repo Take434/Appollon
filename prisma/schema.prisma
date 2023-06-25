@@ -26,7 +26,7 @@ model User {
   refreshToken   String         @db.Text
   token          String         @db.Text
   audio_features Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
-  audio_FeaturesId String?
+  audio_FeaturesId String? @unique
 }
 
 model Track {
@@ -37,7 +37,7 @@ model Track {
   addedTo          Playlist[]
   genres           Genre[]
   audio_features   Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
-  audio_FeaturesId String?
+  audio_FeaturesId String? @unique
 }
 
 model Genre {
@@ -54,7 +54,7 @@ model Playlist {
   followers        User[]
   tracks           Track[]
   audio_features   Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
-  audio_FeaturesId String?
+  audio_FeaturesId String? @unique
 }
 
 model Album {
@@ -86,7 +86,7 @@ model Audio_Features {
   danceability     Float
   energy           Float
   valence          Float
-  User             User[]
-  Track            Track[]
-  Playlist         Playlist[]
+  User             User?
+  Track            Track?
+  Playlist         Playlist?
 }

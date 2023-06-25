@@ -10,5 +10,4 @@ export const apiTrackAudioFeatures = z
     danceability: z.number(),
     energy: z.number(),
     valence: z.number(),
-  })
-  .array();
+  });

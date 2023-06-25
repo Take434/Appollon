@@ -1,10 +1,10 @@
 "use server";
 
-import { audioFeaturesForTracks } from "../api-actions.ts/audioFeaturesForTracks.action";
+import { getClient } from "@/prismaClient";
+import { getAudioFeaturesForTracks } from "../api-actions.ts/getAudioFeaturesForPlaylists.action";
 import { getSavedTracks } from "../api-actions.ts/getSavedTracks.action";
 
 export const trackAnalysis = async () => {
-  "use server";
 
   const savedTracks = await getSavedTracks();
 
@@ -13,7 +13,7 @@ export const trackAnalysis = async () => {
     return;
   }
 
-  const audioFeatures = await audioFeaturesForTracks(
+  const audioFeatures = await getAudioFeaturesForTracks(
     savedTracks.map((track) => track.id)
   );
 
@@ -28,5 +28,26 @@ export const trackAnalysis = async () => {
     duration_ms += af.duration_ms;
   });
 
-  return duration_ms / audioFeatures.length / 1000;
+  return audioFeatures;
 };
+
+export const getTracksAnalysisForPlaylist = async (playlistId: string) => {
+  const prisma = getClient();
+
+  const currentPlaylist = await prisma.playlist.findFirst({
+    where: {
+      id: playlistId,
+    }
+  });
+
+  if(!currentPlaylist) {
+    console.log("Playlist not found");
+    return;
+  }
+
+  if(currentPlaylist.audio_FeaturesId) {
+    return currentPlaylist.audio_FeaturesId;
+  }
+
+  const audioFeatures = await getAudioFeaturesForTracks
+}

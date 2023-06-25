@@ -70,6 +70,7 @@ export const playlistPreview = async () => {
           creatorName: found.creatorName,
           id: found.id,
           title: found.title,
+          audio_FeaturesId: null,
         };
         playlistsToUpdate.push(newPlaylist);
       }
@@ -79,6 +80,7 @@ export const playlistPreview = async () => {
           creatorName: apiP.creatorName,
           id: apiP.id,
           title: apiP.title,
+          audio_FeaturesId: null,
         };
         playlistsToCreate.push(newPlaylist)
       }
