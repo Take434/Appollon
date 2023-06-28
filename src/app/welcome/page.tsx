@@ -1,6 +1,5 @@
 "use client";
 
-import { testingAction } from "../../server-actions/test.action";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -9,26 +8,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Welcome() {
-  const [profileData, setProfileData] = useState<z.infer<
-    typeof meResponseSchema
-  > | null>(null);
-  const { push } = useRouter();
-
-  useEffect(() => {
-    testingAction().then((data) => {
-      if (data === "No token found") {
-        console.log("No token found");
-        push("/login");
-        return;
-      }
-      setProfileData(data as z.infer<typeof meResponseSchema>);
-    });
-  }, [push]);
+  const [profileData] = useState<z.infer<typeof meResponseSchema> | null>(null);
 
   return (
     <div>
       <h1>Welcome {profileData?.display_name}</h1>
-      {profileData ? (
+      {profileData?.images.length ? (
         <Image
           src={profileData.images[0].url}
           alt="the users profile picture"
