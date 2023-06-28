@@ -1,7 +1,9 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { refreshSpotifyToken } from "@/server-actions/spotifyHandling.action";
+import { meResponseSchema } from "@/types/spotifyAuthTypes";
+import axios from "axios";
+import { spotifyRequestWrapper } from "@/utils/spotifyUtils";
 
 export const testingAction = async () => {
   "use server";
@@ -12,22 +14,24 @@ export const testingAction = async () => {
     return "No token found";
   }
 
-  const res = await refreshSpotifyToken(token);
+  // const res = await refreshSpotifyToken(token);
 
-  console.log(res);
+  // console.log(res);
 
-  // const res = await axios.get("https://api.spotify.com/v1/me", {
-  //   headers: {
-  //     Authorization: "Bearer " + token,
-  //   },
-  // });
+  return spotifyRequestWrapper(async () => {
+    const res = await axios.get("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
-  // const parsedData = meResponseSchema.safeParse(res.data);
+    const parsedData = meResponseSchema.safeParse(res.data);
 
-  // if (!parsedData.success) {
-  //   console.error(parsedData.error.flatten());
-  //   return;
-  // }
+    if (!parsedData.success) {
+      console.error(parsedData.error.flatten());
+      return;
+    }
 
-  // return parsedData.data;
+    return parsedData.data;
+  });
 };
