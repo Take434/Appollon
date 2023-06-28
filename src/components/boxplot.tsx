@@ -15,10 +15,11 @@ type BoxPlotProps = {
  */
 export default function BoxPlot({ data, scale }: BoxPlotProps) {
   data.sort((a, b) => a - b);
+  scale.sort((a, b) => a - b);
 
-  // const nomramlizedData = data.map(
-  //   (x) => ((x - data[0]) / (data[data.length - 1] - data[0])) * scale.length
-  // );
+  data = data.map(
+    (x) => ((x - scale[0]) / (scale[scale.length - 1] - scale[0])) * 100
+  );
 
   console.log(data);
 
@@ -30,11 +31,11 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
   const iqr = q3 - q1;
   const lowerWhisker = Math.max(min, q1 - 1.5 * iqr);
   const upperWhisker = Math.min(max, q3 + 1.5 * iqr);
-  const lowerOutliers = data.filter((x) => x < lowerWhisker);
-  const upperOutliers = data.filter((x) => x > upperWhisker);
+  const outliers = data.filter((x) => x < lowerWhisker || x > upperWhisker);
   const svgWidth = 384;
   const svgHeight = 100;
-  const scaleSteps = 100 / (scale.length - 0.7);
+
+  //x - min d. Skala / max - min d. Skala
 
   console.log({
     min,
@@ -45,70 +46,57 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
     iqr,
     lowerWhisker,
     upperWhisker,
-    lowerOutliers,
-    upperOutliers,
+    outliers,
   });
 
   return (
     <div className="text-textDark w-full">
       <svg width={svgWidth} height={svgHeight}>
         <line
-          x1={`${lowerWhisker * scaleSteps + 1.2}%`}
+          x1={`${lowerWhisker}%`}
           y1="0%"
-          x2={`${lowerWhisker * scaleSteps + 1.2}%`}
+          x2={`${lowerWhisker}%`}
           y2="60%"
           stroke="white"
           strokeWidth="2"
         />
         <line
-          x1={`${upperWhisker * scaleSteps + 1.2}%`}
+          x1={`${upperWhisker}%`}
           y1="0%"
-          x2={`${upperWhisker * scaleSteps + 1.2}%`}
+          x2={`${upperWhisker}%`}
           y2="60%"
           stroke="white"
           strokeWidth="2"
         />
         <line
-          x1={`${lowerWhisker * scaleSteps + 1.2}%`}
+          x1={`${lowerWhisker}%`}
           y1="30%"
-          x2={`${upperWhisker * scaleSteps + 1.2}%`}
+          x2={`${upperWhisker}%`}
           y2="30%"
           stroke="white"
           strokeWidth="2"
         />
         <rect
-          x={`${q1 * scaleSteps + 1.2}%`}
+          x={`${q1}%`}
           y="0%"
-          width={`${(q3 - q1) * scaleSteps}%`}
+          width={`${q3 - q1}%`}
           height="60%"
           fill="pink"
         />
         <line
-          x1={`${median * scaleSteps + 1.2}%`}
+          x1={`${median}%`}
           y1="0%"
-          x2={`${median * scaleSteps + 1.2}%`}
+          x2={`${median}%`}
           y2="60%"
           stroke="black"
           strokeWidth="2"
         />
         {
           //generate the outliers
-          lowerOutliers.map((outlier, index) => (
+          outliers.map((outlier, index) => (
             <circle
               key={index}
-              cx={`${outlier * scaleSteps + 1.2}%`}
-              cy="30%"
-              r="1%"
-              fill="white"
-            />
-          ))
-        }
-        {
-          //generate the outliers
-          upperOutliers.map((outlier, index) => (
-            <circle
-              key={index}
-              cx={`${outlier * scaleSteps + 1.2}%`}
+              cx={`${outlier}%`}
               cy="30%"
               r="1%"
               fill="white"
@@ -121,16 +109,16 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
             <>
               <line
                 key={index}
-                x1={`${index * scaleSteps + 1.2}%`}
+                x1={`${index}%`}
                 y1="79%"
-                x2={`${index * scaleSteps + 1.2}%`}
+                x2={`${index}%`}
                 y2="85%"
                 stroke="white"
                 strokeWidth="1"
               />
               <text
                 key={index}
-                x={`${index * scaleSteps + 2.5}%`}
+                x={`${index}%`}
                 y="100%"
                 fontSize="1rem"
                 textAnchor="middle"
@@ -146,7 +134,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
         <line
           x1="1.5%"
           y1="80%"
-          x2={`${(scale.length - 1) * scaleSteps + 1.2}%`}
+          x2={`${scale.length - 1}%`}
           y2="80%"
           stroke="white"
           strokeWidth="1"
