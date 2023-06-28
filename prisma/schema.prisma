@@ -11,61 +11,66 @@ datasource db {
 }
 
 model ValidStates {
-  state     String @id
+  state     String   @id
   timeStamp DateTime
 }
 
 model User {
-  id            String @id
-  email         String
-  name          String
-  playlists     Playlist[]
-  albums        Album[]
-  pfpLink       String
-  isAdmin       Boolean
-  refreshToken  String @db.Text
-  token         String @db.Text
+  id             String         @id
+  email          String
+  name           String
+  playlists      Playlist[]
+  pfpLink        String
+  isAdmin        Boolean
+  refreshToken   String         @db.Text
+  token          String         @db.Text
+  audio_features Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
+  audio_FeaturesId String? @unique
 }
 
 model Track {
-  id                String @id 
-  title             String
-  album             Album @relation(fields: [albumId], references: [id])
-  albumId           String
-  addedTo           Playlist[]
-  duration_ms       Int 
-  instrumentalness  Float
-  loudness          Float
-  tempo             Float
-  danceability      Float
-  energy            Float
-  valence           Float
+  id               String         @id
+  title            String
+  addedTo          Playlist[]
+  genres           Genre[]
+  audio_features   Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
+  audio_FeaturesId String? @unique
+  artists            Artist[]
+}
+
+model Genre {
+  id     String  @id
+  title  String
+  tracks Track[]
 }
 
 model Playlist {
-  id          String @id
-  title       String
-  coverLink   String
-  creatorName String
-  followers   User[]
-  tracks      Track[]
-}
-
-model Album {
-  id        String @id
-  title     String
-  release   DateTime
-  songCount Int
-  coverLink String
-  followers User[]
-  tracks    Track[]
-  artist    Artist @relation(fields: [artistId], references: [id])
-  artistId  String
+  id               String         @id
+  title            String
+  coverLink        String
+  creatorName      String
+  followers        User[]
+  tracks           Track[]
+  audio_features   Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
+  audio_FeaturesId String? @unique
 }
 
 model Artist {
-  id      String @id
+  id      String  @id
   name    String
-  albums  Album[] 
-  albumId String
+  tracks  Track[]
+}
+
+model Audio_Features {
+  id               String     @id
+  duration_ms      Int
+  instrumentalness Float
+  loudness         Float
+  tempo            Float
+  danceability     Float
+  energy           Float
+  valence          Float
+  User             User?
+  Track            Track?
+  Playlist         Playlist?
 }
