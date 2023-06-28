@@ -1,12 +1,10 @@
 "use server";
 
-import { savedTracks } from "@/models/models/savedTracks";
-import { Playlist, Track } from "@prisma/client";
+import { Playlist } from "@prisma/client";
 import { getClient } from "../../prismaClient";
 import axios from "axios";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { PlaylistWithTracks } from "@/models/dbModels/dbModels";
 import { apiSimplifiedPlaylistObject } from "@/models/apiModels/apiSimplifiedPlaylistObject";
 
 const apiPlaylistResponse = z.object({
@@ -64,7 +62,9 @@ export const getPlaylistsForUser = async () => {
       }
     );
 
-    const parsedData = apiSimplifiedPlaylistObject.array().safeParse(res.data.items);
+    const parsedData = apiSimplifiedPlaylistObject
+      .array()
+      .safeParse(res.data.items);
 
     if (!parsedData.success) {
       console.log(parsedData.error);
@@ -72,16 +72,18 @@ export const getPlaylistsForUser = async () => {
       return;
     }
 
-    playlistsArray.push(...parsedData.data.map(pA => {
-      const playlist: Playlist = {
-        coverLink: pA.images[0] ? pA.images[0].url : "",
-        creatorName: pA.owner.display_name,
-        id: pA.id,
-        title: pA.name,
-        audio_FeaturesId: null
-      }
-      return playlist;
-    }));
+    playlistsArray.push(
+      ...parsedData.data.map((pA) => {
+        const playlist: Playlist = {
+          coverLink: pA.images[0] ? pA.images[0].url : "",
+          creatorName: pA.owner.display_name,
+          id: pA.id,
+          title: pA.name,
+          audio_FeaturesId: null,
+        };
+        return playlist;
+      })
+    );
     currentPlaylistCount += currentTrackLimit;
   }
 
@@ -91,14 +93,14 @@ export const getPlaylistsForUser = async () => {
 
   const currentUser = await prisma.user.findFirst({
     where: {
-      token: token
+      token: token,
     },
     include: {
       playlists: true,
     },
   });
 
-  if(!currentUser) {
+  if (!currentUser) {
     console.log("No user found");
     return;
   }
@@ -106,10 +108,10 @@ export const getPlaylistsForUser = async () => {
   const savedTracksPlaylist: Playlist = {
     coverLink: "temp",
     creatorName: currentUser.name,
-    id: "SAVEDTRACKS_" + currentUser.id ,
+    id: "SAVEDTRACKS_" + currentUser.id,
     title: "Saved Tracks",
-    audio_FeaturesId: null
-  }
+    audio_FeaturesId: null,
+  };
 
   playlistsArray.push(savedTracksPlaylist);
 

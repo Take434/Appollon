@@ -1,11 +1,10 @@
 "use server";
 
 import { getClient } from "@/prismaClient";
-import { getAudioFeaturesForTracks } from "../api-actions.ts/getAudioFeaturesForPlaylists.action";
-import { getSavedTracks } from "../api-actions.ts/getSavedTracks.action";
+import { getAudioFeaturesForTracks } from "@/utils/api-utils/getAudioFeaturesForPlaylists.action";
+import { getSavedTracks } from "@/utils/api-utils/getSavedTracks.action";
 
 export const trackAnalysis = async () => {
-
   const savedTracks = await getSavedTracks();
 
   if (savedTracks === "No token found" || !savedTracks) {
@@ -37,17 +36,17 @@ export const getTracksAnalysisForPlaylist = async (playlistId: string) => {
   const currentPlaylist = await prisma.playlist.findFirst({
     where: {
       id: playlistId,
-    }
+    },
   });
 
-  if(!currentPlaylist) {
+  if (!currentPlaylist) {
     console.log("Playlist not found");
     return;
   }
 
-  if(currentPlaylist.audio_FeaturesId) {
+  if (currentPlaylist.audio_FeaturesId) {
     return currentPlaylist.audio_FeaturesId;
   }
 
-  const audioFeatures = await getAudioFeaturesForTracks
-}
+  const audioFeatures = await getAudioFeaturesForTracks;
+};

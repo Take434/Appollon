@@ -13,9 +13,9 @@ const apiSavedTracksResponse = z.object({
   total: z.number(),
   items: z.array(
     z.object({
-      track: apiTrack
+      track: apiTrack,
     })
-  )
+  ),
 });
 
 export const getSavedTracks = async () => {
@@ -27,16 +27,19 @@ export const getSavedTracks = async () => {
     return "No token found";
   }
 
-  const apiCall = await axios.get<z.infer<typeof apiSavedTracksResponse>>("https://api.spotify.com/v1/me/tracks", {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-    params: {
-      market: "GE",
-      limit: 1,
-      offset: 0,
-    },
-  });
+  const apiCall = await axios.get<z.infer<typeof apiSavedTracksResponse>>(
+    "https://api.spotify.com/v1/me/tracks",
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      params: {
+        market: "GE",
+        limit: 1,
+        offset: 0,
+      },
+    }
+  );
 
   const savedTracksArray: z.infer<typeof savedTracks> = [];
 

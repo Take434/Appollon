@@ -10,11 +10,9 @@ const apiAudioFeaturesResponse = z.object({
   audio_features: apiTrackAudioFeatures.array(),
 });
 
-export const getAudioFeaturesForPlaylist = async (playlistId: string) => {
-  
-}
+//export const getAudioFeaturesForPlaylist = async (playlistId: string) => {};
 
-export const getAudioFeaturesForTracks = async (trackIds: String[]) => {
+export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
   "use server";
 
   const token = cookies().get("token")?.value;
@@ -27,8 +25,7 @@ export const getAudioFeaturesForTracks = async (trackIds: String[]) => {
 
   const trackAudioFeatures: Audio_Features[] = [];
 
-  while(trackIds.length > currentTrackCount) {
-
+  while (trackIds.length > currentTrackCount) {
     const res = await axios.get<z.infer<typeof apiAudioFeaturesResponse>>(
       "https://api.spotify.com/v1/audio-features",
       {
@@ -36,7 +33,9 @@ export const getAudioFeaturesForTracks = async (trackIds: String[]) => {
           Authorization: "Bearer " + token,
         },
         params: {
-          ids: trackIds.slice(currentTrackCount, currentTrackCount + 100).toString(),
+          ids: trackIds
+            .slice(currentTrackCount, currentTrackCount + 100)
+            .toString(),
         },
       }
     );
@@ -51,10 +50,7 @@ export const getAudioFeaturesForTracks = async (trackIds: String[]) => {
 
     trackAudioFeatures.push(...parsedData.data.audio_features);
     currentTrackCount += 100;
-
   }
 
   return trackAudioFeatures;
-
-  
-}
+};
