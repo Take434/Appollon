@@ -16,7 +16,7 @@ export default function Login() {
   //THIS IS A TEMPORARY FIX FOR A BUG ONLY HAPPENING IN DEV MODE
   //THIS HAS TO BE REMOVED ONCE THE APP IS DEPLOYED
   useEffect(() => {
-    fetch("/welcome");
+    fetch("/(loggedin)/home");
   });
 
   return (
