@@ -106,13 +106,13 @@ export default function Welcome() {
             height={150}
           />
           <h1 className="text-3xl">Hi, {profileData.name}</h1>
-          <div className="max-w-xl w-11/12 aspect-square">
+          <div className="max-w-xl w-11/12 aspect-square py-2">
             <Doughnut
               data={userStats}
               options={{
                 plugins: {
                   legend: {
-                    position: "right",
+                    position: "bottom",
                     labels: {
                       color: getComputedStyle(document.body).getPropertyValue(
                         "--color-text-dark"

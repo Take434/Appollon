@@ -4,6 +4,9 @@ import React from "react";
 type BoxPlotProps = {
   data: number[];
   scale: number[];
+  textColor: string;
+  boxColor: string;
+  medianColor: string;
 };
 
 /**
@@ -13,15 +16,20 @@ type BoxPlotProps = {
  * @param scale The scale to be displayed on the x-axis
  * @returns A box plot
  */
-export default function BoxPlot({ data, scale }: BoxPlotProps) {
+export default function BoxPlot({
+  data,
+  scale,
+  textColor,
+  medianColor,
+  boxColor,
+}: BoxPlotProps) {
+  const offset = 3;
+
   data.sort((a, b) => a - b);
   scale.sort((a, b) => a - b);
-
   data = data.map(
-    (x) => ((x - scale[0]) / (scale[scale.length - 1] - scale[0])) * 100
+    (x) => ((x - scale[0]) / (scale[scale.length - 1] - scale[0])) * 92 + offset
   );
-
-  console.log(data);
 
   const min = data[0];
   const max = data[data.length - 1];
@@ -34,20 +42,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
   const outliers = data.filter((x) => x < lowerWhisker || x > upperWhisker);
   const svgWidth = 384;
   const svgHeight = 100;
-
-  //x - min d. Skala / max - min d. Skala
-
-  console.log({
-    min,
-    max,
-    median,
-    q1,
-    q3,
-    iqr,
-    lowerWhisker,
-    upperWhisker,
-    outliers,
-  });
+  const scaleStep = 92 / (scale.length - 1);
 
   return (
     <div className="text-textDark w-full">
@@ -57,7 +52,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
           y1="0%"
           x2={`${lowerWhisker}%`}
           y2="60%"
-          stroke="white"
+          stroke={textColor}
           strokeWidth="2"
         />
         <line
@@ -65,7 +60,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
           y1="0%"
           x2={`${upperWhisker}%`}
           y2="60%"
-          stroke="white"
+          stroke={textColor}
           strokeWidth="2"
         />
         <line
@@ -73,7 +68,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
           y1="30%"
           x2={`${upperWhisker}%`}
           y2="30%"
-          stroke="white"
+          stroke={textColor}
           strokeWidth="2"
         />
         <rect
@@ -81,14 +76,14 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
           y="0%"
           width={`${q3 - q1}%`}
           height="60%"
-          fill="pink"
+          fill={boxColor}
         />
         <line
           x1={`${median}%`}
           y1="0%"
           x2={`${median}%`}
           y2="60%"
-          stroke="black"
+          stroke={medianColor}
           strokeWidth="2"
         />
         {
@@ -99,7 +94,7 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
               cx={`${outlier}%`}
               cy="30%"
               r="1%"
-              fill="white"
+              fill={textColor}
             />
           ))
         }
@@ -108,35 +103,40 @@ export default function BoxPlot({ data, scale }: BoxPlotProps) {
           scale.map((step, index) => (
             <>
               <line
-                key={index}
-                x1={`${index}%`}
+                x1={`${index * scaleStep + offset}%`}
                 y1="79%"
-                x2={`${index}%`}
+                x2={`${index * scaleStep + offset}%`}
                 y2="85%"
-                stroke="white"
+                stroke={textColor}
                 strokeWidth="1"
               />
-              <text
-                key={index}
-                x={`${index}%`}
-                y="100%"
-                fontSize="1rem"
-                textAnchor="middle"
-                fill="white"
-                textRendering={"geometricPrecision"}
-                dx="-0.3rem"
+              <svg
+                x={`${index * scaleStep + offset - scaleStep / 2}%`}
+                y="85%"
+                width={`${scaleStep}%`}
+                height="30%"
+                fill={textColor}
               >
-                {step}
-              </text>
+                <text
+                  x="50%"
+                  y="50%"
+                  fontSize="1rem"
+                  textAnchor="middle"
+                  fill={textColor}
+                  textRendering={"geometricPrecision"}
+                >
+                  {step}
+                </text>
+              </svg>
             </>
           ))
         }
         <line
-          x1="1.5%"
+          x1={`${offset}%`}
           y1="80%"
-          x2={`${scale.length - 1}%`}
+          x2={`${(scale.length - 1) * scaleStep + offset}%`}
           y2="80%"
-          stroke="white"
+          stroke={textColor}
           strokeWidth="1"
         />
       </svg>

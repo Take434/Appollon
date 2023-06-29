@@ -1,5 +1,6 @@
 import BoxPlot from "@/components/boxplot";
 import React from "react";
+import { theme } from "../../../../tailwind.config";
 
 export default function PersonalStats() {
   return (
@@ -12,6 +13,9 @@ export default function PersonalStats() {
             2.32,
           ]}
           scale={[1, 2, 3, 4, 5, 6, 7]}
+          textColor={theme.extend.colors.textDark}
+          boxColor={theme.extend.colors.primary}
+          medianColor={theme.extend.colors.textLight}
         />
         <BoxPlot
           data={[
@@ -19,6 +23,28 @@ export default function PersonalStats() {
             100, 100, 100, 180, 180, 180, 170, 150,
           ]}
           scale={[60, 80, 100, 120, 140, 160, 180]}
+          textColor={theme.extend.colors.textDark}
+          boxColor={theme.extend.colors.primary}
+          medianColor={theme.extend.colors.textLight}
+        />
+        <BoxPlot
+          data={[
+            90, 100, 110, 120, 130, 140, 150, 160, 90, 90, 140, 160, 150, 160,
+            100, 100, 100, 180, 180, 180, 170, 150,
+          ]}
+          scale={[60, 80, 100, 120, 140, 160, 180]}
+          textColor={theme.extend.colors.textDark}
+          boxColor={theme.extend.colors.primary}
+          medianColor={theme.extend.colors.textLight}
+        />
+        <BoxPlot
+          data={[
+            0, 0.1, 0.234, 0.253, 0.5, 0.74, 0.64, 0.56, 0.34, 0.23, 0.12, 0.1,
+          ]}
+          scale={[0, 0.2, 0.4, 0.6, 0.8, 1]}
+          textColor={theme.extend.colors.textDark}
+          boxColor={theme.extend.colors.primary}
+          medianColor={theme.extend.colors.textLight}
         />
       </div>
     </div>

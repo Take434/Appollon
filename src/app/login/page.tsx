@@ -49,22 +49,25 @@ export default function Login() {
           </span>
         </button>
         <div className="border border-textDark text-textDark text-center row-start-6 row-span-5 col-start-6 col-span-6 bg-slate-400 rounded-xl">
-          3
+          This will be the logo
         </div>
-        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl">
-          4
-        </div>
-        <div className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center">
+        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl"></div>
+        <button
+          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center"
+          onClick={() => router.push("/about")}
+        >
           <QuestionMarkCircle className="w-6 h-6" />
           About
-        </div>
-        <div className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center">
-          <GithubIcon className="w-6 h-6" />
-          <br />
+        </button>
+        <button
+          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center"
+          onClick={() => router.push("https://github.com/Take434/Apollon")}
+        >
+          <GithubIcon className="w-14 h-14" />
           <span className="flex">
-            View the code <ExternalLink className="w-6 h-6" />
+            View the code <ExternalLink className="w-4 h-4 my-auto" />
           </span>
-        </div>
+        </button>
       </div>
     </>
   );
