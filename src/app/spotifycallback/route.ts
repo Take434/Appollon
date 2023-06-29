@@ -109,7 +109,7 @@ export async function GET(request: Request) {
     });
   }
 
-  const answ = NextResponse.redirect(`http:localhost:3000/welcome`);
+  const answ = NextResponse.redirect(`http:localhost:3000/home`);
 
   const cookie = answ.cookies.get("token");
 

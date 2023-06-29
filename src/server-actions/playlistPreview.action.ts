@@ -4,7 +4,6 @@ import { Playlist, User } from "@prisma/client";
 import { getPlaylistsForUser } from "../utils/api-utils/getPlaylistsForUser.action";
 import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
-import { PlaylistWithFollowers } from "@/models/dbModels/dbModels";
 
 export const playlistPreview = async () => {
   const prisma = getClient();
