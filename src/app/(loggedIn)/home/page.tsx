@@ -1,35 +1,35 @@
 "use client";
 
-import { z } from "zod";
 import { useEffect, useState } from "react";
 import React from "react";
-import { meResponseSchema } from "@/types/spotifyAuthTypes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ExternalLink } from "@/components/icons/Heroicons";
 import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
+import { getUserData } from "@/server-actions/getUserData.action";
+import { UserWithPlaylists } from "@/models/dbModels/dbModels";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Welcome() {
-  const [profileData, setProfileData] = useState<z.infer<
-    typeof meResponseSchema
-  > | null>(null);
+  const [profileData, setProfileData] = useState<UserWithPlaylists | null>(
+    null
+  );
   const [userStats, setUserStats] = useState<any>(null); //TODO: [z.infer<typeof userStatsSchema>]
   const [userPlaylists, setUserPlaylists] = useState<any>(null); // TODO: [z.infer<typeof playlistSchema>
   const { push } = useRouter();
 
   useEffect(() => {
-    // testingAction().then((data) => {
-    //   if (data === "No token found") {
-    //     console.log("No token found");
-    //     push("/login");
-    //     return;
-    //   }
-    //   setProfileData(data as z.infer<typeof meResponseSchema>);
-    // });
+    getUserData().then((data) => {
+      if (data === "No token found") {
+        console.log("No token found");
+        push("/login");
+        return;
+      }
+      setProfileData(data as UserWithPlaylists);
+    });
 
     setUserStats({
       labels: ["Metal", "Alternative Rock", "J-Rock", "Funk", "Post-Punk"],
@@ -100,12 +100,12 @@ export default function Welcome() {
       {profileData ? (
         <>
           <Image
-            src={profileData.images[0].url}
+            src={profileData.pfpLink}
             alt="the users profile picture"
             width={150}
             height={150}
           />
-          <h1 className="text-3xl">Hi, {profileData.display_name}</h1>
+          <h1 className="text-3xl">Hi, {profileData.name}</h1>
           <div className="max-w-xl w-11/12 aspect-square">
             <Doughnut
               data={userStats}
