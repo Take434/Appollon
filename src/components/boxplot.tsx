@@ -1,5 +1,8 @@
+"use client";
+
 /* eslint-disable tsdoc/syntax */
 import React from "react";
+import { Popover } from "@headlessui/react";
 
 type BoxPlotProps = {
   data: number[];
@@ -16,13 +19,13 @@ type BoxPlotProps = {
  * @param scale The scale to be displayed on the x-axis
  * @returns A box plot
  */
-export default function BoxPlot({
+export const BoxPlot = ({
   data,
   scale,
   textColor,
   medianColor,
   boxColor,
-}: BoxPlotProps) {
+}: BoxPlotProps) => {
   const offset = 3;
 
   data.sort((a, b) => a - b);
@@ -45,7 +48,7 @@ export default function BoxPlot({
   const scaleStep = 92 / (scale.length - 1);
 
   return (
-    <div className="text-textDark w-full">
+    <div className="w-full">
       <svg width={svgWidth} height={svgHeight}>
         <line
           x1={`${lowerWhisker}%`}
@@ -101,7 +104,7 @@ export default function BoxPlot({
         {
           //generate the steps of the scale
           scale.map((step, index) => (
-            <>
+            <g key={index}>
               <line
                 x1={`${index * scaleStep + offset}%`}
                 y1="79%"
@@ -128,7 +131,7 @@ export default function BoxPlot({
                   {step}
                 </text>
               </svg>
-            </>
+            </g>
           ))
         }
         <line
@@ -142,4 +145,28 @@ export default function BoxPlot({
       </svg>
     </div>
   );
-}
+};
+
+type BoxPlotPopoverProps = {
+  data: number[];
+  scale: number[];
+  textColor: string;
+  boxColor: string;
+  medianColor: string;
+};
+
+export const BoxPlotWithPopover = (props: BoxPlotPopoverProps) => {
+  return (
+    <Popover className="relative">
+      <Popover.Button className="focus:outline-none">
+        <BoxPlot {...props} />
+      </Popover.Button>
+
+      <Popover.Panel className="absolute z-10 w-96 bg-black bg-opacity-20">
+        <div>
+          <h1>This is cool</h1>
+        </div>
+      </Popover.Panel>
+    </Popover>
+  );
+};

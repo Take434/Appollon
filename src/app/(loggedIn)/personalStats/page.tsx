@@ -1,4 +1,4 @@
-import BoxPlot from "@/components/boxplot";
+import { BoxPlot, BoxPlotWithPopover } from "@/components/boxplot";
 import React from "react";
 import { theme } from "../../../../tailwind.config";
 
@@ -37,7 +37,7 @@ export default function PersonalStats() {
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
         />
-        <BoxPlot
+        <BoxPlotWithPopover
           data={[
             0, 0.1, 0.234, 0.253, 0.5, 0.74, 0.64, 0.56, 0.34, 0.23, 0.12, 0.1,
           ]}
