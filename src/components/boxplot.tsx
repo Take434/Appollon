@@ -138,6 +138,7 @@ const BoxPlot = (props: StylingProps & StatisticalBoxPlotProps) => {
 
 export const BoxPlotWithoutPopover = (props: StylingProps & DataProps) => {
   const stats = calculateData(props.data, props.scale);
+  console.log(stats);
   return <BoxPlot {...{ ...stats, ...props }} />;
 };
 
@@ -150,11 +151,18 @@ export const BoxPlotWithPopover = (props: StylingProps & DataProps) => {
         <BoxPlot {...{ ...stats, ...props }} />
       </Popover.Button>
 
-      <Popover.Panel className="absolute z-10 w-full flex top-0 bg-black bg-opacity-80">
-        <div className="flex flex-col">
-          <p>Stats:</p>
-          <p></p>
-        </div>
+      <Popover.Panel>
+        <Popover.Button className="absolute z-10 w-full top-0 bg-black bg-opacity-80 pl-3">
+          <div className="grid grid-cols-2 justify-items-start">
+            <p className="col-span-2 justify-self-center">Stats:</p>
+            <p>left whisker: {stats.lowerWhisker}</p>
+            <p>right whisker: {stats.upperWhisker}</p>
+            <p>q1: {stats.q1}</p>
+            <p>q3: {stats.q3}</p>
+            <p>median: {stats.median}</p>
+            <p>amount of outliers: {stats.outliers.length}</p>
+          </div>
+        </Popover.Button>
       </Popover.Panel>
     </Popover>
   );
@@ -190,7 +198,7 @@ const calculateData = (data: number[], scale: number[]) => {
     q1: q1,
     q3: q3,
     lowerWhisker: lowerWhisker,
-    upperWhisker: lowerWhisker,
+    upperWhisker: upperWhisker,
     outliers: data.filter((x) => x < lowerWhisker || x > upperWhisker),
     svgWidth: 384,
     svgHeight: 100,
