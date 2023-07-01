@@ -9,6 +9,7 @@ import {
   Eye,
   QuestionMarkCircle,
 } from "@/components/icons/Heroicons";
+import { ApollonIcon } from "@/components/icons/ApollonIcons";
 
 export default function Login() {
   const router = useRouter();
@@ -48,8 +49,8 @@ export default function Login() {
             Connect your account <ExternalLink className="w-6 h-6" />
           </span>
         </button>
-        <div className="border border-textDark text-textDark text-center row-start-6 row-span-5 col-start-6 col-span-6 bg-slate-400 rounded-xl">
-          This will be the logo
+        <div className="row-start-6 row-span-5 col-start-6 col-span-6">
+          <ApollonIcon width={200} height={200} />
         </div>
         <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl"></div>
         <button

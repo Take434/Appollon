@@ -10,6 +10,7 @@ import { ExternalLink } from "@/components/icons/Heroicons";
 import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
 import { getUserData } from "@/server-actions/getUserData.action";
 import { UserWithPlaylists } from "@/models/dbModels/dbModels";
+import { LoadingComponent } from "@/components/loading";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -134,7 +135,7 @@ export default function Welcome() {
           </div>
         </>
       ) : (
-        <h1>Loading...</h1>
+        <LoadingComponent />
       )}
     </div>
   );

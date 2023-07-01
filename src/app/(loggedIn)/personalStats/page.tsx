@@ -1,4 +1,7 @@
-import { BoxPlot, BoxPlotWithPopover } from "@/components/boxplot";
+import {
+  BoxPlotWithoutPopover,
+  BoxPlotWithPopover,
+} from "@/components/boxplot";
 import React from "react";
 import { theme } from "../../../../tailwind.config";
 
@@ -7,7 +10,7 @@ export default function PersonalStats() {
     <div className="text-textDark flex flex-col items-center justify-center">
       <h1>Personal Stats</h1>
       <div className="mt-20 grid grid-cols-1 gap-5">
-        <BoxPlot
+        <BoxPlotWithoutPopover
           data={[
             2.323, 2, 4, 2, 1.43, 2.12, 5.323, 1.123, 2.234, 3.092, 2.32, 3.23,
             2.32,
@@ -17,7 +20,7 @@ export default function PersonalStats() {
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
         />
-        <BoxPlot
+        <BoxPlotWithoutPopover
           data={[
             80, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 90, 70, 80, 90,
             100, 100, 100, 180, 180, 180, 170, 150,
@@ -27,7 +30,7 @@ export default function PersonalStats() {
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
         />
-        <BoxPlot
+        <BoxPlotWithoutPopover
           data={[
             90, 100, 110, 120, 130, 140, 150, 160, 90, 90, 140, 160, 150, 160,
             100, 100, 100, 180, 180, 180, 170, 150,
