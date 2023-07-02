@@ -13,7 +13,6 @@ const apiAudioFeaturesResponse = z.object({
 //export const getAudioFeaturesForPlaylist = async (playlistId: string) => {};
 
 export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
-  "use server";
 
   const token = cookies().get("token")?.value;
 
@@ -43,7 +42,6 @@ export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
     const parsedData = apiAudioFeaturesResponse.safeParse(res.data);
 
     if (!parsedData.success) {
-      console.log(res.data);
       console.log(parsedData.error);
       console.error(parsedData.error.flatten());
       return;
@@ -52,7 +50,12 @@ export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
     trackAudioFeatures.push(
       ...(parsedData.data.audio_features!.filter(
         (item) => item !== null
-      ) as Audio_Features[])
+      ) as Audio_Features[]).map(item => {
+        return {
+          ...item,
+          id: "AUDIOFEATURES_" + item.id,
+        } as Audio_Features;
+      })
     );
     currentTrackCount += 100;
   }

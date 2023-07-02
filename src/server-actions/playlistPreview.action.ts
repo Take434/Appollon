@@ -1,10 +1,10 @@
 "use server";
 
 import { Playlist, User } from "@prisma/client";
-import { getPlaylistsForUser } from "../utils/api-utils/getPlaylistsForUser.action";
+import { getPlaylistsForUser } from "../utils/api-utils/getPlaylistsForUser.util";
 import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
-import { getTracksForPlaylist } from "@/utils/api-utils/getTracks.action";
+import { addCompletePlaylistToDb } from "@/utils/getTracks.util";
 import { spotifyRequestWrapper } from "@/utils/spotifyUtils";
 import { setTimeout } from "timers/promises";
 
@@ -112,10 +112,8 @@ export const playlistPreview = async () => {
     await setTimeout(2000);
     console.log(`${i * 2 + 2} seconds have passed!`);
 
-    await spotifyRequestWrapper(() => getTracksForPlaylist(playlists[i].id));
+    await spotifyRequestWrapper(() => addCompletePlaylistToDb(playlists[i].id));
   }
-
-  console.log("HE DID IT WHOHOHOHO");
 
   return playlists;
 };
