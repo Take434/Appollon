@@ -58,16 +58,16 @@ export const addCompletePlaylistToDb = async (playlistId: string) => {
     },
   });
 
-  apiTracks = apiTracks.filter((track, index, tracks) => {
+  const filteredApiTracks = apiTracks.filter((track, index, tracks) => {
     return (
       !allTracksInDb.find((trackInDb) => trackInDb.id === track.id) &&
       tracks.findIndex((item) => item.id === track.id) === index
     );
   });
 
-  if (apiTracks.length > 0) {
+  if (filteredApiTracks.length > 0) {
     const audioFeatures = await createAudioFeaturesForTracks(
-      apiTracks.map((item) => item.id)
+      filteredApiTracks.map((item) => item.id)
     );
 
     if (audioFeatures === "No token found") {
@@ -78,11 +78,11 @@ export const addCompletePlaylistToDb = async (playlistId: string) => {
       return;
     }
 
-    await createArtistsForTracks(apiTracks);
+    await createArtistsForTracks(filteredApiTracks);
 
-    await createTracks(apiTracks, audioFeatures);
+    await createTracks(filteredApiTracks, audioFeatures);
 
-    await createArtistRelationForTracks(apiTracks);
+    await createArtistRelationForTracks(filteredApiTracks);
   }
 
   await updatePlaylistRelationForPlaylist(playlistId, apiTracks);
