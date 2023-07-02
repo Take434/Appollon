@@ -4,7 +4,7 @@ import { apiTrack } from "./apiTrack";
 
 export const apiPlaylist = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().nullish(),
   images: z
     .object({
       url: z.string(),

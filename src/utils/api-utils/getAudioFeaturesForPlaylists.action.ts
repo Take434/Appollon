@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 
 const apiAudioFeaturesResponse = z.object({
-  audio_features: apiTrackAudioFeatures.array(),
+  audio_features: z.array(apiTrackAudioFeatures.nullable()),
 });
 
 //export const getAudioFeaturesForPlaylist = async (playlistId: string) => {};
@@ -43,12 +43,17 @@ export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
     const parsedData = apiAudioFeaturesResponse.safeParse(res.data);
 
     if (!parsedData.success) {
+      console.log(res.data);
       console.log(parsedData.error);
       console.error(parsedData.error.flatten());
       return;
     }
 
-    trackAudioFeatures.push(...parsedData.data.audio_features);
+    trackAudioFeatures.push(
+      ...(parsedData.data.audio_features!.filter(
+        (item) => item !== null
+      ) as Audio_Features[])
+    );
     currentTrackCount += 100;
   }
 

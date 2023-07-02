@@ -4,6 +4,9 @@ import { Playlist, User } from "@prisma/client";
 import { getPlaylistsForUser } from "../utils/api-utils/getPlaylistsForUser.action";
 import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
+import { getTracksForPlaylist } from "@/utils/api-utils/getTracks.action";
+import { spotifyRequestWrapper } from "@/utils/spotifyUtils";
+import { setTimeout } from "timers/promises";
 
 export const playlistPreview = async () => {
   const prisma = getClient();
@@ -37,7 +40,7 @@ export const playlistPreview = async () => {
   } else {
     console.log("getting from api");
 
-    const apiPlaylists = await getPlaylistsForUser();
+    const apiPlaylists = await spotifyRequestWrapper(getPlaylistsForUser);
 
     if (apiPlaylists === "No token found") {
       console.log("No token found");
@@ -92,7 +95,9 @@ export const playlistPreview = async () => {
       },
       data: {
         playlists: {
-          connect: playlistsToUpdate.map((item) => ({ id: item.id })),
+          connect: playlistsToUpdate
+            .concat(playlistsToCreate)
+            .map((item) => ({ id: item.id })),
         },
       },
       include: {
@@ -100,10 +105,17 @@ export const playlistPreview = async () => {
       },
     });
 
-    console.log(createPlaylists);
-
     playlists.push(...apiPlaylists);
   }
+
+  for (let i = 0; i < playlists.length; i++) {
+    await setTimeout(2000);
+    console.log(`${i * 2 + 2} seconds have passed!`);
+
+    await spotifyRequestWrapper(() => getTracksForPlaylist(playlists[i].id));
+  }
+
+  console.log("HE DID IT WHOHOHOHO");
 
   return playlists;
 };

@@ -46,7 +46,7 @@ model Genre {
 
 model Playlist {
   id               String           @id
-  title            String
+  title            String           @default("This playlist has no title!")
   coverLink        String           @db.Text
   creatorName      String
   followers        User[]
