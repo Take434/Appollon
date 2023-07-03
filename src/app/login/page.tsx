@@ -27,13 +27,13 @@ export default function Login() {
           APOLLON
         </h1>
       </div>
-      <div className="mx-10 text-textDark mt-10">
+      <div className="md:mx-auto mx-10 text-textDark mt-10">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod magnam
         iure ipsum incidunt corporis libero, expedita ex veritatis repudiandae
         sequi!
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg">
+      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg md:mx-auto">
         <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-evenly">
           <Eye className="w-6 h-6" />
           <span className="vertical-rl">Example Account</span>
