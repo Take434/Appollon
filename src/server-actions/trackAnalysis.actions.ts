@@ -1,8 +1,8 @@
 "use server";
 
 import { getClient } from "@/prismaClient";
-import { getAudioFeaturesForTracks } from "@/utils/api-utils/getAudioFeaturesForPlaylists.action";
-import { getSavedTracks } from "@/utils/api-utils/getSavedTracks.action";
+import { getAudioFeaturesForTracks } from "@/utils/api-utils/getAudioFeaturesForPlaylists.util";
+import { getSavedTracks } from "@/utils/api-utils/getSavedTracks.util";
 
 export const trackAnalysis = async () => {
   const savedTracks = await getSavedTracks();

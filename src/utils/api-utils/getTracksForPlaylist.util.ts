@@ -23,6 +23,8 @@ export const getTracksForPlaylist = async (playlistId: string) => {
     return "No token found";
   }
 
+  const apiTracks: z.infer<typeof apiTrack>[] = [];
+
   const apiCall = await axios.get<z.infer<typeof apiTracksForPlaylistResponse>>(
     `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
     {
@@ -45,7 +47,7 @@ export const getTracksForPlaylist = async (playlistId: string) => {
     return;
   }
 
-  const currentTrackCount = 0;
+  let currentTrackCount = 0;
   const totalTrackCount = parsedData.data.total;
 
   while (totalTrackCount > currentTrackCount) {
@@ -57,8 +59,8 @@ export const getTracksForPlaylist = async (playlistId: string) => {
         },
         params: {
           market: "GE",
-          limit: currentTrackCount + 50,
-          offset: 50,
+          limit: 50,
+          offset: currentTrackCount,
         },
       }
     );
@@ -70,5 +72,11 @@ export const getTracksForPlaylist = async (playlistId: string) => {
       console.error(parsedData.error.flatten());
       return;
     }
+
+    apiTracks.push(...parsedData.data.items.map((item) => item.track));
+
+    currentTrackCount += 50;
   }
+
+  return apiTracks;
 };
