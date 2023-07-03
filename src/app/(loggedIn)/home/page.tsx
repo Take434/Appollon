@@ -10,6 +10,7 @@ import { ExternalLink } from "@/components/icons/Heroicons";
 import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
 import { getUserData } from "@/server-actions/getUserData.action";
 import { UserWithPlaylists } from "@/models/dbModels/dbModels";
+import { LoadingComponent } from "@/components/loading";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -106,13 +107,13 @@ export default function Welcome() {
             height={150}
           />
           <h1 className="text-3xl">Hi, {profileData.name}</h1>
-          <div className="max-w-xl w-11/12 aspect-square">
+          <div className="max-w-xl w-11/12 aspect-square py-2">
             <Doughnut
               data={userStats}
               options={{
                 plugins: {
                   legend: {
-                    position: "right",
+                    position: "bottom",
                     labels: {
                       color: getComputedStyle(document.body).getPropertyValue(
                         "--color-text-dark"
@@ -134,7 +135,7 @@ export default function Welcome() {
           </div>
         </>
       ) : (
-        <h1>Loading...</h1>
+        <LoadingComponent />
       )}
     </div>
   );

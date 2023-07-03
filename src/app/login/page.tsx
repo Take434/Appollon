@@ -9,6 +9,7 @@ import {
   Eye,
   QuestionMarkCircle,
 } from "@/components/icons/Heroicons";
+import { ApollonIcon } from "@/components/icons/ApollonIcons";
 
 export default function Login() {
   const router = useRouter();
@@ -26,13 +27,13 @@ export default function Login() {
           APOLLON
         </h1>
       </div>
-      <div className="mx-10 text-textDark mt-10">
+      <div className="md:mx-auto mx-10 text-textDark mt-10">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod magnam
         iure ipsum incidunt corporis libero, expedita ex veritatis repudiandae
         sequi!
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg">
+      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg md:mx-auto">
         <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-evenly">
           <Eye className="w-6 h-6" />
           <span className="vertical-rl">Example Account</span>
@@ -48,23 +49,26 @@ export default function Login() {
             Connect your account <ExternalLink className="w-6 h-6" />
           </span>
         </button>
-        <div className="border border-textDark text-textDark text-center row-start-6 row-span-5 col-start-6 col-span-6 bg-slate-400 rounded-xl">
-          3
+        <div className="row-start-6 row-span-5 col-start-6 col-span-6">
+          <ApollonIcon width={200} height={200} />
         </div>
-        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl">
-          4
-        </div>
-        <div className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center">
+        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl"></div>
+        <button
+          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center"
+          onClick={() => router.push("/about")}
+        >
           <QuestionMarkCircle className="w-6 h-6" />
           About
-        </div>
-        <div className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center">
-          <GithubIcon className="w-6 h-6" />
-          <br />
+        </button>
+        <button
+          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center"
+          onClick={() => router.push("https://github.com/Take434/Apollon")}
+        >
+          <GithubIcon className="w-14 h-14" />
           <span className="flex">
-            View the code <ExternalLink className="w-6 h-6" />
+            View the code <ExternalLink className="w-4 h-4 my-auto" />
           </span>
-        </div>
+        </button>
       </div>
     </>
   );
