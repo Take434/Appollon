@@ -7,14 +7,10 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 
 const apiAudioFeaturesResponse = z.object({
-  audio_features: apiTrackAudioFeatures.array(),
+  audio_features: z.array(apiTrackAudioFeatures.nullable()),
 });
 
-//export const getAudioFeaturesForPlaylist = async (playlistId: string) => {};
-
 export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
-  "use server";
-
   const token = cookies().get("token")?.value;
 
   if (!token) {
@@ -48,7 +44,18 @@ export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
       return;
     }
 
-    trackAudioFeatures.push(...parsedData.data.audio_features);
+    trackAudioFeatures.push(
+      ...(
+        parsedData.data.audio_features!.filter(
+          (item) => item !== null
+        ) as Audio_Features[]
+      ).map((item) => {
+        return {
+          ...item,
+          id: "AUDIOFEATURES_" + item.id,
+        } as Audio_Features;
+      })
+    );
     currentTrackCount += 100;
   }
 
