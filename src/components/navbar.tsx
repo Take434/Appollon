@@ -27,7 +27,7 @@ export const Navbar = ({ currentPage, setCurretPage }: NavbarProps) => {
       icon: <PieChartIcon className="w-10 h-10" />,
     },
     {
-      url: "/playlistOverview",
+      url: "/playlists",
       icon: <ListIcon className="w-10 h-10" />,
     },
     {
