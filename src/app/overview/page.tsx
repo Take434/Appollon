@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { trackAnalysis } from "@/server-actions/trackAnalysis.actions";
 import React from "react";
+import { playlistAnalysis, playlistAnalysis2 } from "@/server-actions/playlistAnalysis.action";
 
 export default function Home() {
   const [userPlaylistData, setUserPlaylistData] = useState<null | Playlist[]>();
   const [userAudioFeatureData, setUserAudioFeatureData] = useState<
-    null | Audio_Features[]
+    null | Audio_Features
   >();
 
   const { push } = useRouter();
@@ -36,12 +37,12 @@ export default function Home() {
       </button>
       <button
         onClick={() => {
-          trackAnalysis().then((data) => {
-            setUserAudioFeatureData(data);
+          playlistAnalysis2("SAVEDTRACKS_jonas_giesen").then((data) => {
+            setUserAudioFeatureData(null);
           });
         }}
       >
-        testButton22222
+        Audio Features for SAVEDTRACKS_jonas_giesen
       </button>
       <br />
       <div>{JSON.stringify(userPlaylistData)}</div>

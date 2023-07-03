@@ -1,6 +1,7 @@
 "use server";
 
 import { apiTrackAudioFeatures } from "@/models/apiModels/apiTrackAudioFeatures";
+import { getClient } from "@/prismaClient";
 import { Audio_Features } from "@prisma/client";
 import axios from "axios";
 import { cookies } from "next/headers";
@@ -10,7 +11,30 @@ const apiAudioFeaturesResponse = z.object({
   audio_features: z.array(apiTrackAudioFeatures.nullable()),
 });
 
-//export const getAudioFeaturesForPlaylist = async (playlistId: string) => {};
+export const getAudioFeaturesForPlaylist = async (playlistId: string) => {
+
+  const prisma = getClient();
+
+  const currentPlaylist = await prisma.playlist.findFirst({
+    where: {
+      id: playlistId,
+    },
+    include: {
+      tracks: {
+        include: {
+          audio_features: true,
+        },
+      },
+    },
+  });
+
+  if(!currentPlaylist) {
+    console.log("playlist not found");
+  }
+
+  return currentPlaylist?.tracks.map(track => track.audio_features);
+
+};
 
 export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
 

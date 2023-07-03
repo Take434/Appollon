@@ -70,6 +70,8 @@ export const addCompletePlaylistToDb = async (playlistId: string) => {
       filteredApiTracks.map((item) => item.id)
     );
 
+    console.log("_------------------------------_");
+
     if (audioFeatures === "No token found") {
       return "No token found";
     }
@@ -161,15 +163,17 @@ export const createTracks = async (
 ) => {
   const prisma = getClient();
 
-  const tracksToCreate = tracks.map((item) => {
+  const tracksToCreate = tracks.map((track) => {
     return {
-      id: item.id,
-      title: item.name,
+      id: track.id,
+      title: track.name,
       audio_FeaturesId:
-        audioFeatures.find((item) => item.id === "AUDIOFEATURES_" + item.id) ??
+        audioFeatures.find((item) => item.id === "AUDIOFEATURES_" + track.id)?.id ??
         null,
     } as Prisma.TrackCreateManyInput;
   });
+
+  console.log(tracksToCreate);
 
   await prisma.track.createMany({
     data: tracksToCreate,
@@ -194,7 +198,7 @@ export const createAudioFeaturesForTracks = async (trackIds: string[]) => {
     data: audioFeaturesForTracks.map((item) => {
       return {
         ...item,
-        id: "AUDIOFEATURES_" + item.id,
+        id: item.id,
       } satisfies Audio_Features;
     }),
     skipDuplicates: true,

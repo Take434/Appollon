@@ -108,12 +108,12 @@ export const playlistPreview = async () => {
     playlists.push(...apiPlaylists);
   }
 
-  for (let i = 0; i < playlists.length; i++) {
-    await setTimeout(2000);
-    console.log(`${i * 2 + 2} seconds have passed!`);
+  // for (let i = 0; i < playlists.length; i++) {
+  //   await setTimeout(2000);
+  //   console.log(`${i * 2 + 2} seconds have passed!`);
 
-    await spotifyRequestWrapper(() => addCompletePlaylistToDb(playlists[i].id));
-  }
+  //   await spotifyRequestWrapper(() => addCompletePlaylistToDb(playlists[i].id));
+  // }
 
   return playlists;
 };
