@@ -23,14 +23,14 @@ export default function Welcome() {
   const { push } = useRouter();
 
   useEffect(() => {
-    // getUserData().then((data) => {
-    //   if (data === "No token found") {
-    //     console.log("No token found");
-    //     push("/login");
-    //     return;
-    //   }
-    //   setProfileData(data as UserWithPlaylists);
-    // });
+    getUserData().then((data) => {
+      if (data === "No token found") {
+        console.log("No token found");
+        push("/login");
+        return;
+      }
+      setProfileData(data as UserWithPlaylists);
+    });
 
     setUserStats({
       labels: ["Metal", "Alternative Rock", "J-Rock", "Funk", "Post-Punk"],

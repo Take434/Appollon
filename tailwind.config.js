@@ -32,6 +32,9 @@ module.exports = {
         warn: '#fc8c03',
         success: '#036ffc',
       },
+      dropShadow: {
+        'cover': '3px 3px 0px var(--color-primary)',
+      },
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))',
       },
