@@ -6,7 +6,7 @@ export const apiArtist = z.object({
       total: z.number(),
     })
     .nullish(),
-  genres: z.string().array().nullish(),
+  genres: z.string().array().optional().nullable(),
   id: z.string(),
   name: z.string(),
 });
