@@ -4,7 +4,6 @@ import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
 
 export const getBasicUserData = async () => {
-
   const token = cookies().get("token")?.value;
 
   if (!token) {
@@ -20,4 +19,4 @@ export const getBasicUserData = async () => {
   });
 
   return currentUser;
-}
+};

@@ -6,7 +6,6 @@ import { getTracksForPlaylist } from "./api-utils/getTracksForPlaylist.util";
 import { addCompletePlaylistToDb } from "./getTracks.util";
 
 export const createAudioFeaturesForPlaylist = async (playlistId: string) => {
-
   const prisma = getClient();
 
   let playlist = await prisma.playlist.findFirst({
@@ -17,16 +16,16 @@ export const createAudioFeaturesForPlaylist = async (playlistId: string) => {
       tracks: {
         include: {
           audio_features: true,
-        }
-      }
+        },
+      },
     },
   });
 
-  if(!playlist) {
+  if (!playlist) {
     return;
   }
 
-  if(playlist.tracks.length === 0) {
+  if (playlist.tracks.length === 0) {
     await addCompletePlaylistToDb(playlistId);
 
     playlist = await prisma.playlist.findFirst({
@@ -37,12 +36,12 @@ export const createAudioFeaturesForPlaylist = async (playlistId: string) => {
         tracks: {
           include: {
             audio_features: true,
-          }
-        }
+          },
+        },
       },
     });
 
-    if(!playlist) {
+    if (!playlist) {
       return;
     }
   }
@@ -51,39 +50,40 @@ export const createAudioFeaturesForPlaylist = async (playlistId: string) => {
 
   const audioFeature = {} as Audio_Features;
 
-  playlist!.tracks.map(item => item.audio_features).map(item => {
-    if(!item) {
-      skippedAf++;
-      return;
-    }
-
-    Object.keys(item).forEach(key => {
-      if(key !== "id") {
-        const currentValue = Reflect.get(audioFeature, key) ?? 0;
-        const newValue = currentValue + Reflect.get(item, key);
-        Reflect.set(audioFeature, key, newValue);
+  playlist!.tracks
+    .map((item) => item.audio_features)
+    .map((item) => {
+      if (!item) {
+        skippedAf++;
+        return;
       }
-    });
-  });
 
-  Object.keys(audioFeature).map(key => {
-    let newValue = Reflect.get(audioFeature, key) / (playlist!.tracks.length - skippedAf);
-    if(key === "duration_ms") {
-      newValue = Math.floor(newValue)
+      Object.keys(item).forEach((key) => {
+        if (key !== "id") {
+          const currentValue = Reflect.get(audioFeature, key) ?? 0;
+          const newValue = currentValue + Reflect.get(item, key);
+          Reflect.set(audioFeature, key, newValue);
+        }
+      });
+    });
+
+  Object.keys(audioFeature).map((key) => {
+    let newValue =
+      Reflect.get(audioFeature, key) / (playlist!.tracks.length - skippedAf);
+    if (key === "duration_ms") {
+      newValue = Math.floor(newValue);
     }
     Reflect.set(audioFeature, key, newValue);
   });
 
-  audioFeature.id = "AUDIOFEATURES_" + playlistId,
-
-  await prisma.audio_Features.upsert({
-    where: {
-      id: "AUDIOFEATURES_" + playlistId,
-    },
-    create: audioFeature,
-    update: audioFeature,
-  });
+  (audioFeature.id = "AUDIOFEATURES_" + playlistId),
+    await prisma.audio_Features.upsert({
+      where: {
+        id: "AUDIOFEATURES_" + playlistId,
+      },
+      create: audioFeature,
+      update: audioFeature,
+    });
 
   return audioFeature;
-
-}
+};

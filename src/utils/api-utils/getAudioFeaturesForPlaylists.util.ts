@@ -12,7 +12,6 @@ const apiAudioFeaturesResponse = z.object({
 });
 
 export const getAudioFeaturesForPlaylist = async (playlistId: string) => {
-
   const prisma = getClient();
 
   const currentPlaylist = await prisma.playlist.findFirst({
@@ -28,12 +27,11 @@ export const getAudioFeaturesForPlaylist = async (playlistId: string) => {
     },
   });
 
-  if(!currentPlaylist) {
+  if (!currentPlaylist) {
     console.log("playlist not found");
   }
 
-  return currentPlaylist?.tracks.map(track => track.audio_features);
-
+  return currentPlaylist?.tracks.map((track) => track.audio_features);
 };
 
 export const getAudioFeaturesForTracks = async (trackIds: string[]) => {

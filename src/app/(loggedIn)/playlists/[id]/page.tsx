@@ -6,25 +6,35 @@ import { PreCalculatedBoxPlot } from "@/components/boxplot";
 import { theme } from "../../../../../tailwind.config";
 
 export default function Playlist({ params }: { params: { id: string } }) {
-  const [boxplotData, setBoxplotData] = useState<StatisticalBoxPlotProps[] | null>(null);
-  
+  const [boxplotData, setBoxplotData] = useState<
+    StatisticalBoxPlotProps[] | null
+  >(null);
+
   useEffect(() => {
     (async () => {
-      setBoxplotData(await playlistAnalysis2(params.id) ?? null);
+      setBoxplotData((await playlistAnalysis2(params.id)) ?? null);
     })();
   }, [params.id]);
 
   return (
     <>
-      {boxplotData && (
+      {boxplotData &&
         boxplotData.map((data, i) => (
-          <div className="text-textDark mt-3">
+          <div key={i} className="text-textDark mt-3">
             <h1>{data.name}</h1>
-            <PreCalculatedBoxPlot {...{ ...data, textColor: theme.extend.colors.textDark, boxColor: theme.extend.colors.primary, medianColor: theme.extend.colors.textLight, svgHeight: 100, svgWidth: 384 }} key={i} />
+            <PreCalculatedBoxPlot
+              {...{
+                ...data,
+                textColor: theme.extend.colors.textDark,
+                boxColor: theme.extend.colors.primary,
+                medianColor: theme.extend.colors.textLight,
+                svgHeight: 100,
+                svgWidth: 384,
+              }}
+              key={i}
+            />
           </div>
-        )
-      )
-      )}
+        ))}
     </>
   );
 }

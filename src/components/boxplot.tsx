@@ -142,7 +142,9 @@ export const BoxPlotWithoutPopover = (props: StylingProps & DataProps) => {
   return <BoxPlot {...{ ...stats, ...props }} />;
 };
 
-export const PreCalculatedBoxPlot = (props: StylingProps & StatisticalBoxPlotProps) => {
+export const PreCalculatedBoxPlot = (
+  props: StylingProps & StatisticalBoxPlotProps
+) => {
   return <BoxPlot {...props} />;
 };
 

@@ -1,12 +1,14 @@
 "use server";
 
 import { getClient } from "@/prismaClient";
-import { getAudioFeaturesForPlaylist, getAudioFeaturesForTracks } from "@/utils/api-utils/getAudioFeaturesForPlaylists.util";
+import {
+  getAudioFeaturesForPlaylist,
+  getAudioFeaturesForTracks,
+} from "@/utils/api-utils/getAudioFeaturesForPlaylists.util";
 import { createAudioFeaturesForPlaylist } from "@/utils/createAudioFeaturesForPlaylist.util";
 import { Audio_Features } from "@prisma/client";
 
 export const playlistAnalysis = async (playlistId: string) => {
-
   const prisma = getClient();
 
   const currentPlaylist = await prisma.playlist.findFirst({
@@ -18,10 +20,10 @@ export const playlistAnalysis = async (playlistId: string) => {
     },
   });
 
-  if(currentPlaylist?.audio_features === null) {
+  if (currentPlaylist?.audio_features === null) {
     const result = await createAudioFeaturesForPlaylist(playlistId);
 
-    if(!result) {
+    if (!result) {
       console.log("error creating audio feature for playlist");
       return;
     }
@@ -30,10 +32,9 @@ export const playlistAnalysis = async (playlistId: string) => {
   }
 
   return currentPlaylist!.audio_features;
-}
+};
 
 export const playlistAnalysis2 = async (playlistId: string) => {
-
   const audioFeatures = await getAudioFeaturesForPlaylist(playlistId);
 
   if (!audioFeatures) {
@@ -53,7 +54,7 @@ export const playlistAnalysis2 = async (playlistId: string) => {
     },
     instrumentalness: {
       data: [],
-      scale: [0, 0.02, 0.04, 0.08,  0.1],
+      scale: [0, 0.02, 0.04, 0.08, 0.1],
     },
     loudness: {
       data: [],
@@ -73,28 +74,31 @@ export const playlistAnalysis2 = async (playlistId: string) => {
     },
   };
 
-  audioFeatures.forEach(af => {
+  audioFeatures.forEach((af) => {
     if (!af) {
       return;
     }
 
-    Object.keys(af).forEach(key => {
+    Object.keys(af).forEach((key) => {
       if (key !== "id") {
-        (Reflect.get(allFeatures, key) as {data: number[], scale: number[]}).data.push(Reflect.get(af, key));
+        (
+          Reflect.get(allFeatures, key) as { data: number[]; scale: number[] }
+        ).data.push(Reflect.get(af, key));
       }
-    })
+    });
   });
 
-  Object.keys(allFeatures).forEach(key => {
+  Object.keys(allFeatures).forEach((key) => {
     data.push(getBoxPlotData(Reflect.get(allFeatures, key), key));
   });
 
   return data;
+};
 
-  console.log(data);
-}
-
-const getBoxPlotData = ({ data, scale }: {data: number[], scale: number[] }, name: string): StatisticalBoxPlotProps => {
+const getBoxPlotData = (
+  { data, scale }: { data: number[]; scale: number[] },
+  name: string
+): StatisticalBoxPlotProps => {
   const offset = 3;
 
   data.sort((a, b) => a - b);
@@ -123,7 +127,7 @@ const getBoxPlotData = ({ data, scale }: {data: number[], scale: number[] }, nam
     offset: offset,
     scale: scale,
   };
-}
+};
 
 type StatisticalBoxPlotProps = {
   name: string;
