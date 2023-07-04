@@ -37,7 +37,6 @@ export const getAudioFeaturesForPlaylist = async (playlistId: string) => {
 };
 
 export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
-
   const token = cookies().get("token")?.value;
 
   if (!token) {
@@ -72,9 +71,11 @@ export const getAudioFeaturesForTracks = async (trackIds: string[]) => {
     }
 
     trackAudioFeatures.push(
-      ...(parsedData.data.audio_features!.filter(
-        (item) => item !== null
-      ) as Audio_Features[]).map(item => {
+      ...(
+        parsedData.data.audio_features!.filter(
+          (item) => item !== null
+        ) as Audio_Features[]
+      ).map((item) => {
         return {
           ...item,
           id: "AUDIOFEATURES_" + item.id,

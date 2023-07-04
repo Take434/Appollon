@@ -18,7 +18,7 @@ export const addCompletePlaylistToDb = async (playlistId: string) => {
     return "No token found";
   }
 
-  let apiTracks: z.infer<typeof apiTrack>[] = [];
+  const apiTracks: z.infer<typeof apiTrack>[] = [];
 
   if (!apiTracks) {
     return;

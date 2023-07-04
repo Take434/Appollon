@@ -3,8 +3,11 @@
 import { IdCard } from "@/components/icons/Heroicons";
 import { Popover } from "@headlessui/react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function HeadingDropdown() {
+  const router = useRouter();
+
   return (
     <Popover className="relative">
       <Popover.Button>
@@ -14,14 +17,20 @@ export default function HeadingDropdown() {
       <Popover.Panel className="absolute z-10 right-0 bg-black bg-opacity-30 rounded-lg text-white">
         <div className="grid grid-cols-1 w-32 p-2 gap-2">
           <h1 className="text-xl border-b border-white ml-1">UserName</h1>
-          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded">
+          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded text-textDark">
             Settings
           </button>
-          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded">
+          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded text-textDark">
             SwitchTheme
           </button>
-          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded">
+          <button className="text-left hover:bg-primary hover:text-textLight px-1 rounded text-textDark">
             Logout
+          </button>
+          <button
+            className="text-left hover:bg-primary hover:text-textLight px-1 rounded text-textDark"
+            onClick={() => router.push("/about")}
+          >
+            About
           </button>
         </div>
       </Popover.Panel>
