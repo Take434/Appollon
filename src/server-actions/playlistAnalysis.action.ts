@@ -53,15 +53,15 @@ export const playlistAnalysis2 = async (playlistId: string) => {
     },
     instrumentalness: {
       data: [],
-      scale: [0, 0.25, 0.5, 0.75, 1],
+      scale: [0, 0.02, 0.04, 0.08,  0.1],
     },
     loudness: {
       data: [],
-      scale: [-60, -30, -10, -5, 0],
+      scale: [-20, -15, -10, -5, 0],
     },
     tempo: {
       data: [],
-      scale: [0, 50, 100, 150, 200],
+      scale: [50, 75, 100, 125, 150, 175, 200],
     },
     valence: {
       data: [],
@@ -87,7 +87,9 @@ export const playlistAnalysis2 = async (playlistId: string) => {
 
   Object.keys(allFeatures).forEach(key => {
     data.push(getBoxPlotData(Reflect.get(allFeatures, key), key));
-  })
+  });
+
+  return data;
 
   console.log(data);
 }

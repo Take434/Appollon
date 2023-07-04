@@ -7,6 +7,8 @@ import { useState } from "react";
 import { trackAnalysis } from "@/server-actions/trackAnalysis.actions";
 import React from "react";
 import { playlistAnalysis, playlistAnalysis2 } from "@/server-actions/playlistAnalysis.action";
+import { getTracksForPlaylist } from "@/utils/api-utils/getTracksForPlaylist.util";
+import { addCompletePlaylistToDb } from "@/utils/getTracks.util";
 
 export default function Home() {
   const [userPlaylistData, setUserPlaylistData] = useState<null | Playlist[]>();
@@ -37,7 +39,7 @@ export default function Home() {
       </button>
       <button
         onClick={() => {
-          playlistAnalysis2("SAVEDTRACKS_jonas_giesen").then((data) => {
+          addCompletePlaylistToDb("SAVEDTRACKS_jonas_giesen").then((data) => {
             setUserAudioFeatureData(null);
           });
         }}
