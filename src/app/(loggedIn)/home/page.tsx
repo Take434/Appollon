@@ -101,10 +101,15 @@ export default function Welcome() {
       {profileData ? (
         <>
           <Image
-            src={profileData.pfpLink}
+            src={
+              profileData.pfpLink
+                ? profileData.pfpLink
+                : "/images/placeholder.png"
+            }
             alt="the users profile picture"
             width={150}
             height={150}
+            className="rounded-2xl border border-textLight drop-shadow-cover -z-10"
           />
           <h1 className="text-3xl">Hi, {profileData.name}</h1>
           <div className="max-w-xl w-11/12 aspect-square py-2">
@@ -129,7 +134,7 @@ export default function Welcome() {
               Your Playlists
               <ArrowTopRightOnSquareIcon className="w-6 h-6 ml-2" />
             </span>
-            <div className="border border-textDark py-2 px-5 w-full h-44 rounded-2xl flex flex-col justify-between">
+            <div className="border border-textDark py-2 px-5 w-full h-44 rounded-2xl flex flex-col justify-between mb-20 drop-shadow-cover bg-linear-gradient">
               {userPlaylists}
             </div>
           </div>

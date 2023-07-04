@@ -1,8 +1,22 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
 import React from "react";
+import localfont from "next/font/local";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = localfont({
+  src: "../fonts/Inter.ttf",
+  variable: "--font-inter",
+});
+
+const montserratAlternates = localfont({
+  src: [
+    {
+      path: "../fonts/MontserratAlternates-Bold.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-montserrat-alternates",
+});
 
 export const metadata = {
   title: "Appollon",
@@ -21,13 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en">
-      <body
-        className={
-          (inter.className,
-          "flex flex-col min-h-screen bg-linear-gradient w-full")
-        }
-      >
+    <html
+      lang="en"
+      className={`${inter.variable} ${montserratAlternates.variable}`}
+    >
+      <body className={"flex flex-col min-h-screen bg-linear-gradient w-full"}>
         {children}
       </body>
     </html>

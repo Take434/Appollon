@@ -29,24 +29,22 @@ export default function Login() {
 
   return (
     <>
-      <div className="mx-auto mt-10 px-24 py-2 bg-primary rounded-xl border border-black">
-        <h1 className="text-3xl text-textLight italic font-semibold">
-          APOLLON
-        </h1>
+      <div className="mx-auto mt-10 px-16 py-3 bg-secondary-800 rounded-xl border border-black drop-shadow-cover">
+        <h1 className="text-4xl text-textLight font-display">APPOLLON</h1>
       </div>
-      <div className="lg:mx-auto mx-10 text-textDark mt-2">
+      <div className="lg:mx-auto mx-10 text-textDark mt-2 px-4">
         Discover your music taste! Connect with Spotify to explore favorite
         genres and analyze playlists for a deeper understanding of your musical
         journey.
       </div>
 
       <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-10 aspect-square max-w-lg md:mx-auto">
-        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-center">
+        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-center drop-shadow-cover bg-linear-gradient">
           <EyeIcon className="w-6 h-6 mb-2" />
           <span className="vertical-rl">Preview App</span>
         </div>
         <button
-          className="border border-textDark text-textDark text-center row-span-4 col-start-6 col-span-11 rounded-xl"
+          className="border border-textDark text-textDark text-center row-span-4 col-start-6 col-span-11 rounded-xl drop-shadow-cover bg-linear-gradient"
           onClick={async () => {
             router.push(await RedirectSpotifyAction());
           }}
@@ -57,19 +55,19 @@ export default function Login() {
             <ArrowTopRightOnSquareIcon className="w-6 h-6 ml-3" />
           </span>
         </button>
-        <div className="row-start-6 row-span-5 col-start-6 col-span-6">
+        <div className="row-start-6 row-span-5 col-start-6 col-span-6 drop-shadow-cover">
           <ApollonIcon width={200} height={200} />
         </div>
-        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl"></div>
+        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl drop-shadow-cover bg-linear-gradient"></div>
         <button
-          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center"
+          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center drop-shadow-cover bg-linear-gradient"
           onClick={() => router.push("/about")}
         >
           <QuestionMarkCircleIcon className="w-6 h-6" />
           About
         </button>
         <button
-          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center"
+          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center drop-shadow-cover bg-linear-gradient"
           onClick={() => router.push("https://github.com/Take434/Apollon")}
         >
           <GithubIcon className="w-14 h-14" />
