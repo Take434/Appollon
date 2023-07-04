@@ -24,7 +24,7 @@ export default function Welcome() {
 
   useEffect(() => {
     getUserData().then((data) => {
-      if (data === "No token found") {
+      if (!data) {
         console.log("No token found");
         push("/login");
         return;

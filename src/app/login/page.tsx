@@ -34,16 +34,16 @@ export default function Login() {
           APOLLON
         </h1>
       </div>
-      <div className="lg:mx-auto mx-10 text-textDark mt-10">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod magnam
-        iure ipsum incidunt corporis libero, expedita ex veritatis repudiandae
-        sequi!
+      <div className="lg:mx-auto mx-10 text-textDark mt-2">
+        Discover your music taste! Connect with Spotify to explore favorite
+        genres and analyze playlists for a deeper understanding of your musical
+        journey.
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg md:mx-auto">
-        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-evenly">
-          <EyeIcon className="w-6 h-6" />
-          <span className="vertical-rl">Example Account</span>
+      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-10 aspect-square max-w-lg md:mx-auto">
+        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-center">
+          <EyeIcon className="w-6 h-6 mb-2" />
+          <span className="vertical-rl">Preview App</span>
         </div>
         <button
           className="border border-textDark text-textDark text-center row-span-4 col-start-6 col-span-11 rounded-xl"
@@ -53,8 +53,8 @@ export default function Login() {
         >
           <SpotifyIcon className="mx-auto mb-1" />
           <span className="flex justify-center">
-            Connect your account{" "}
-            <ArrowTopRightOnSquareIcon className="w-6 h-6" />
+            Connect
+            <ArrowTopRightOnSquareIcon className="w-6 h-6 ml-3" />
           </span>
         </button>
         <div className="row-start-6 row-span-5 col-start-6 col-span-6">
@@ -75,7 +75,7 @@ export default function Login() {
           <GithubIcon className="w-14 h-14" />
           <span className="flex">
             View the code{" "}
-            <ArrowTopRightOnSquareIcon className="w-4 h-4 my-auto" />
+            <ArrowTopRightOnSquareIcon className="w-4 h-4 my-auto ml-2" />
           </span>
         </button>
       </div>

@@ -7,7 +7,8 @@ export const getUserData = async () => {
   const token = cookies().get("token")?.value;
 
   if (!token) {
-    return "No token found";
+    console.log("No token found");
+    return;
   }
 
   const prisma = getClient();

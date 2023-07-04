@@ -1,5 +1,5 @@
 import { useSpring, animated } from "@react-spring/web";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 export const LoadingComponent = () => {
   return (
