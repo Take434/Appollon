@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { ExternalLink } from "@/components/icons/Heroicons";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
 import { getUserData } from "@/server-actions/getUserData.action";
 import { UserWithPlaylists } from "@/models/dbModels/dbModels";
@@ -127,7 +127,7 @@ export default function Welcome() {
           <div className="flex flex-col w-4/5">
             <span className="flex">
               Your Playlists
-              <ExternalLink className="w-6 h-6 ml-2" />
+              <ArrowTopRightOnSquareIcon className="w-6 h-6 ml-2" />
             </span>
             <div className="border border-textDark py-2 px-5 w-full h-44 rounded-2xl flex flex-col justify-between">
               {userPlaylists}

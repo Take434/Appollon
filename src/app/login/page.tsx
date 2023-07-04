@@ -5,19 +5,26 @@ import { RedirectSpotifyAction } from "@/server-actions/spotifyHandling.action";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import {
-  ExternalLink,
-  Eye,
-  QuestionMarkCircle,
-} from "@/components/icons/Heroicons";
+  ArrowTopRightOnSquareIcon,
+  EyeIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline";
 import { ApollonIcon } from "@/components/icons/ApollonIcons";
+import { isUserLoggedIn } from "@/server-actions/loginInfo.action";
 
 export default function Login() {
   const router = useRouter();
 
-  //THIS IS A TEMPORARY FIX FOR A BUG ONLY HAPPENING IN DEV MODE
-  //THIS HAS TO BE REMOVED ONCE THE APP IS DEPLOYED
   useEffect(() => {
+    //THIS IS A TEMPORARY FIX FOR A BUG ONLY HAPPENING IN DEV MODE
+    //THIS HAS TO BE REMOVED ONCE THE APP IS DEPLOYED
     fetch("/home");
+
+    (async () => {
+      if (await isUserLoggedIn()) {
+        router.push("/home");
+      }
+    })();
   });
 
   return (
@@ -27,7 +34,7 @@ export default function Login() {
           APOLLON
         </h1>
       </div>
-      <div className="md:mx-auto mx-10 text-textDark mt-10">
+      <div className="lg:mx-auto mx-10 text-textDark mt-10">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod magnam
         iure ipsum incidunt corporis libero, expedita ex veritatis repudiandae
         sequi!
@@ -35,7 +42,7 @@ export default function Login() {
 
       <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg md:mx-auto">
         <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-evenly">
-          <Eye className="w-6 h-6" />
+          <EyeIcon className="w-6 h-6" />
           <span className="vertical-rl">Example Account</span>
         </div>
         <button
@@ -46,7 +53,8 @@ export default function Login() {
         >
           <SpotifyIcon className="mx-auto mb-1" />
           <span className="flex justify-center">
-            Connect your account <ExternalLink className="w-6 h-6" />
+            Connect your account{" "}
+            <ArrowTopRightOnSquareIcon className="w-6 h-6" />
           </span>
         </button>
         <div className="row-start-6 row-span-5 col-start-6 col-span-6">
@@ -57,7 +65,7 @@ export default function Login() {
           className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center"
           onClick={() => router.push("/about")}
         >
-          <QuestionMarkCircle className="w-6 h-6" />
+          <QuestionMarkCircleIcon className="w-6 h-6" />
           About
         </button>
         <button
@@ -66,7 +74,8 @@ export default function Login() {
         >
           <GithubIcon className="w-14 h-14" />
           <span className="flex">
-            View the code <ExternalLink className="w-4 h-4 my-auto" />
+            View the code{" "}
+            <ArrowTopRightOnSquareIcon className="w-4 h-4 my-auto" />
           </span>
         </button>
       </div>
