@@ -16,32 +16,25 @@ model ValidStates {
 }
 
 model User {
-  id             String           @id
-  email          String
-  name           String
-  playlists      Playlist[]
-  pfpLink        String           @db.Text
-  isAdmin        Boolean
-  refreshToken   String           @db.Text
-  token          String           @db.Text
-  audio_features Audio_Features?  @relation(fields: [audio_FeaturesId], references: [id])
-  audio_FeaturesId String?        @unique
+  id                String          @id
+  email             String
+  name              String
+  playlists         Playlist[]
+  pfpLink           String          @db.Text
+  isAdmin           Boolean
+  refreshToken      String          @db.Text
+  token             String          @db.Text
+  audio_features    Audio_Features? @relation(fields: [audio_FeaturesId], references: [id])
+  audio_FeaturesId  String?         @unique
 }
 
 model Track {
   id               String           @id
   title            String
   addedTo          Playlist[]
-  genres           Genre[]
   audio_features   Audio_Features?  @relation(fields: [audio_FeaturesId], references: [id])
   audio_FeaturesId String?          @unique
-  artists            Artist[]
-}
-
-model Genre {
-  id     String  @id
-  title  String
-  tracks Track[]
+  artists          Artist[]
 }
 
 model Playlist {
@@ -58,6 +51,7 @@ model Playlist {
 model Artist {
   id      String  @id
   name    String
+  genres  String?
   tracks  Track[]
 }
 

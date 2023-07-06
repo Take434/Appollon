@@ -8,8 +8,8 @@ import { z } from "zod";
 import { getAudioFeaturesForTracks } from "./api-utils/getAudioFeaturesForPlaylists.util";
 import { getClient } from "@/prismaClient";
 import { getSavedTracks } from "./api-utils/getSavedTracks.util";
-import { setTimeout } from "timers/promises";
 import { getTracksForPlaylist } from "./api-utils/getTracksForPlaylist.util";
+import { apiArtist } from "@/models/apiModels/apiArtist";
 
 export const addCompletePlaylistToDb = async (playlistId: string) => {
   const token = cookies().get("token")?.value;
@@ -134,6 +134,49 @@ export const createArtistRelationForTracks = async (
   await prisma.$executeRawUnsafe(rawQuery);
 };
 
+const apiArtistsResponse = z.object({
+  artists: apiArtist.array(),
+});
+
+export const getArtistsByIds = async (artistIds: string[]) => {
+  const token = cookies().get("token")?.value;
+
+  if (!token) {
+    return "No token found";
+  }
+
+  const apiArtists: z.infer<typeof apiArtist>[] = [];
+  let current = 0;
+
+  while (current < artistIds.length) {
+    const res = await axios.get<z.infer<typeof apiArtistsResponse>>(
+      `https://api.spotify.com/v1/artists`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        params: {
+          ids: artistIds.slice(current, current + 50).toString(),
+        },
+      }
+    );
+
+    current += 50;
+
+    const parsedData = apiArtistsResponse.safeParse(res.data);
+
+    if (!parsedData.success) {
+      console.log(parsedData.error);
+      console.error(parsedData.error.flatten());
+      return;
+    }
+
+    apiArtists.push(...parsedData.data.artists);
+  }
+
+  return apiArtists;
+};
+
 export const createArtistsForTracks = async (
   tracks: z.infer<typeof apiTrack>[]
 ) => {
@@ -146,13 +189,41 @@ export const createArtistsForTracks = async (
       return {
         id: artist.id,
         name: artist.name,
+        genres: artist.genres?.join(","),
       } as Prisma.ArtistCreateManyInput;
     });
 
+  const allArtistsInDb = await prisma.artist.findMany();
+
+  const filteredArtists = artistsToCreate.filter((artist, index, artists) => {
+    return (
+      !allArtistsInDb.find((artistInDb) => artistInDb.id === artist.id) &&
+      artists.findIndex((item) => item.id === artist.id) === index
+    );
+  });
+
+  const artistsForGenres = await getArtistsByIds(
+    filteredArtists.map((artist) => artist.id)
+  );
+
+  if (artistsForGenres === "No token found" || undefined) {
+    return;
+  }
+
+  const finalArtists = filteredArtists.map((artist) => {
+    const found = artistsForGenres?.find((item) => item.id === artist.id);
+    return {
+      ...artist,
+      genres: found!.genres?.join(",") ?? "",
+    } as Prisma.ArtistCreateManyInput;
+  });
+
   await prisma.artist.createMany({
-    data: artistsToCreate,
+    data: finalArtists,
     skipDuplicates: true,
   });
+
+  return artistsForGenres;
 };
 
 export const createTracks = async (
@@ -161,13 +232,13 @@ export const createTracks = async (
 ) => {
   const prisma = getClient();
 
-  const tracksToCreate = tracks.map((item) => {
+  const tracksToCreate = tracks.map((track) => {
     return {
-      id: item.id,
-      title: item.name,
+      id: track.id,
+      title: track.name,
       audio_FeaturesId:
-        audioFeatures.find((item) => item.id === "AUDIOFEATURES_" + item.id) ??
-        null,
+        audioFeatures.find((item) => item.id === "AUDIOFEATURES_" + track.id)
+          ?.id ?? null,
     } as Prisma.TrackCreateManyInput;
   });
 
@@ -194,7 +265,7 @@ export const createAudioFeaturesForTracks = async (trackIds: string[]) => {
     data: audioFeaturesForTracks.map((item) => {
       return {
         ...item,
-        id: "AUDIOFEATURES_" + item.id,
+        id: item.id,
       } satisfies Audio_Features;
     }),
     skipDuplicates: true,
