@@ -1,6 +1,6 @@
 ##### DEPENDENCIES
 
-FROM --platform=linux/amd64 node:18-alpine AS deps
+FROM --platform=linux/amd64 node:20-alpine AS deps
 WORKDIR /app
 
 # Install Prisma Client - remove if not using Prisma
@@ -20,7 +20,7 @@ RUN \
 
 ##### BUILDER
 
-FROM --platform=linux/amd64 node:18-alpine AS builder
+FROM --platform=linux/amd64 node:20-alpine AS builder
 ARG DATABASE_URL
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -35,9 +35,9 @@ RUN \
  else echo "Lockfile not found." && exit 1; \
  fi
 
-##### RUNNER
+#### RUNNER
 
-FROM --platform=linux/amd64 node:18-alpine AS runner
+FROM --platform=linux/amd64 node:20-alpine AS runner
 WORKDIR /app
 
 ARG COMMIT
@@ -52,7 +52,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/next.config.mjs ./
+COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 

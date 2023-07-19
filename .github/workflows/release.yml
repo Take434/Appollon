@@ -1,0 +1,85 @@
+name: Release
+on: 
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      REPOSITORY: take434/appollon
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create Container
+        run: docker build -t $REPOSITORY:latest .
+
+      #####################################
+      # Push to Github Container Registry #
+      #####################################
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag Docker image for Github registry (current version)
+        run: docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$VERSION
+        env:
+          OWNER: ${{ github.repository_owner }}
+          VERSION: ${{ github.event.release.tag_name }}
+
+      - name: Push Docker image to Github registry (current version)
+        run: docker push $REGISTRY/$REPOSITORY:$VERSION
+        env:
+          OWNER: ${{ github.repository_owner }}
+          VERSION: ${{ github.event.release.tag_name }}
+
+      - name: Tag Docker image for Github registry (latest)
+        run: docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$VERSION
+        env:
+          OWNER: ${{ github.repository_owner }}
+          VERSION: latest
+
+      - name: Push Docker image to Github registry (latest)
+        run: docker push $REGISTRY/$REPOSITORY:$VERSION
+        env:
+          OWNER: ${{ github.repository_owner }}
+          VERSION: latest
