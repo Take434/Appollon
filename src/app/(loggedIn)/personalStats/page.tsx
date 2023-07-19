@@ -19,6 +19,8 @@ export default function PersonalStats() {
           textColor={theme.extend.colors.textDark}
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
+          svgHeight={100}
+          svgWidth={384}
         />
         <BoxPlotWithoutPopover
           data={[
@@ -29,6 +31,8 @@ export default function PersonalStats() {
           textColor={theme.extend.colors.textDark}
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
+          svgHeight={100}
+          svgWidth={384}
         />
         <BoxPlotWithoutPopover
           data={[
@@ -39,6 +43,8 @@ export default function PersonalStats() {
           textColor={theme.extend.colors.textDark}
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
+          svgHeight={100}
+          svgWidth={384}
         />
         <BoxPlotWithPopover
           data={[
@@ -48,6 +54,8 @@ export default function PersonalStats() {
           textColor={theme.extend.colors.textDark}
           boxColor={theme.extend.colors.primary}
           medianColor={theme.extend.colors.textLight}
+          svgHeight={100}
+          svgWidth={384}
         />
       </div>
     </div>
