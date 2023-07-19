@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  CalenderIcon,
+  CalendarIcon,
   HomeIcon,
-  ListIcon,
-  PieChartIcon,
-} from "@/components/icons/Heroicons";
+  ListBulletIcon,
+  ChartPieIcon,
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -24,15 +24,15 @@ export const Navbar = ({ currentPage, setCurretPage }: NavbarProps) => {
     },
     {
       url: "/personalStats",
-      icon: <PieChartIcon className="w-10 h-10" />,
+      icon: <ChartPieIcon className="w-10 h-10" />,
     },
     {
       url: "/playlists",
-      icon: <ListIcon className="w-10 h-10" />,
+      icon: <ListBulletIcon className="w-10 h-10" />,
     },
     {
       url: "/listeningActivity",
-      icon: <CalenderIcon className="w-10 h-10" />,
+      icon: <CalendarIcon className="w-10 h-10" />,
     },
   ];
 

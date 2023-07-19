@@ -8,6 +8,8 @@ type StylingProps = {
   textColor: string;
   boxColor: string;
   medianColor: string;
+  svgWidth: number;
+  svgHeight: number;
 };
 
 type DataProps = {
@@ -137,7 +139,12 @@ const BoxPlot = (props: StylingProps & StatisticalBoxPlotProps) => {
 };
 
 export const BoxPlotWithoutPopover = (props: StylingProps & DataProps) => {
-  const stats = calculateData(props.data, props.scale);
+  const stats = calculateData(
+    props.data,
+    props.scale,
+    props.svgWidth,
+    props.svgHeight
+  );
   console.log(stats);
   return <BoxPlot {...{ ...stats, ...props }} />;
 };
@@ -149,7 +156,12 @@ export const PreCalculatedBoxPlot = (
 };
 
 export const BoxPlotWithPopover = (props: StylingProps & DataProps) => {
-  const stats = calculateData(props.data, props.scale);
+  const stats = calculateData(
+    props.data,
+    props.scale,
+    props.svgWidth,
+    props.svgHeight
+  );
 
   return (
     <Popover className="relative">
@@ -182,7 +194,12 @@ export const BoxPlotWithPopover = (props: StylingProps & DataProps) => {
  * @param scale The scale to use for the boxplot.
  * @returns The statistical data for the boxplot.
  */
-const calculateData = (data: number[], scale: number[]) => {
+const calculateData = (
+  data: number[],
+  scale: number[],
+  svgWidth: number,
+  svgHeight: number
+) => {
   const offset = 3;
 
   data.sort((a, b) => a - b);
@@ -206,8 +223,8 @@ const calculateData = (data: number[], scale: number[]) => {
     lowerWhisker: lowerWhisker,
     upperWhisker: upperWhisker,
     outliers: data.filter((x) => x < lowerWhisker || x > upperWhisker),
-    svgWidth: 384,
-    svgHeight: 100,
+    svgWidth: svgWidth,
+    svgHeight: svgHeight,
     scaleStep: 92 / (scale.length - 1),
     offset: offset,
     scale: scale,

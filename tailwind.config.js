@@ -2,6 +2,7 @@
 /** @type {import('tailwindcss').Config} */
 
 const plugin = require('tailwindcss/plugin');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: [
@@ -62,6 +63,10 @@ module.exports = {
         '13': '13',
         '14': '14',
         '15': '15',
+      },
+      fontFamily: {
+        display: ["var(--font-montserrat-alternates)", "sans-serif"],
+        sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
       }
     },
   },

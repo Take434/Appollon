@@ -5,68 +5,75 @@ import { RedirectSpotifyAction } from "@/server-actions/spotifyHandling.action";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import {
-  ExternalLink,
-  Eye,
-  QuestionMarkCircle,
-} from "@/components/icons/Heroicons";
+  ArrowTopRightOnSquareIcon,
+  EyeIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline";
 import { ApollonIcon } from "@/components/icons/ApollonIcons";
+import { isUserLoggedIn } from "@/server-actions/loginInfo.action";
 
 export default function Login() {
   const router = useRouter();
 
-  //THIS IS A TEMPORARY FIX FOR A BUG ONLY HAPPENING IN DEV MODE
-  //THIS HAS TO BE REMOVED ONCE THE APP IS DEPLOYED
   useEffect(() => {
+    //THIS IS A TEMPORARY FIX FOR A BUG ONLY HAPPENING IN DEV MODE
+    //THIS HAS TO BE REMOVED ONCE THE APP IS DEPLOYED
     fetch("/home");
+
+    (async () => {
+      if (await isUserLoggedIn()) {
+        router.push("/home");
+      }
+    })();
   });
 
   return (
     <>
-      <div className="mx-auto mt-10 px-24 py-2 bg-primary rounded-xl border border-black">
-        <h1 className="text-3xl text-textLight italic font-semibold">
-          APOLLON
-        </h1>
+      <div className="mx-auto mt-10 px-16 py-3 bg-secondary-800 rounded-xl border border-black drop-shadow-cover">
+        <h1 className="text-4xl text-textLight font-display">APPOLLON</h1>
       </div>
-      <div className="md:mx-auto mx-10 text-textDark mt-10">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod magnam
-        iure ipsum incidunt corporis libero, expedita ex veritatis repudiandae
-        sequi!
+      <div className="lg:mx-auto mx-10 text-textDark mt-2 px-4">
+        Discover your music taste! Connect with Spotify to explore favorite
+        genres and analyze playlists for a deeper understanding of your musical
+        journey.
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-20 aspect-square max-w-lg md:mx-auto">
-        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-evenly">
-          <Eye className="w-6 h-6" />
-          <span className="vertical-rl">Example Account</span>
+      <div className="grid grid-cols-16 grid-rows-16 mx-5 mt-10 aspect-square max-w-lg md:mx-auto">
+        <div className="border border-textDark text-textDark text-center row-start-3 row-span-8 col-span-4 rounded-xl flex flex-col items-center pt-2 justify-center drop-shadow-cover bg-linear-gradient">
+          <EyeIcon className="w-6 h-6 mb-2" />
+          <span className="vertical-rl">Preview App</span>
         </div>
         <button
-          className="border border-textDark text-textDark text-center row-span-4 col-start-6 col-span-11 rounded-xl"
+          className="border border-textDark text-textDark text-center row-span-4 col-start-6 col-span-11 rounded-xl drop-shadow-cover bg-linear-gradient"
           onClick={async () => {
             router.push(await RedirectSpotifyAction());
           }}
         >
           <SpotifyIcon className="mx-auto mb-1" />
           <span className="flex justify-center">
-            Connect your account <ExternalLink className="w-6 h-6" />
+            Connect
+            <ArrowTopRightOnSquareIcon className="w-6 h-6 ml-3" />
           </span>
         </button>
-        <div className="row-start-6 row-span-5 col-start-6 col-span-6">
+        <div className="row-start-6 row-span-5 col-start-6 col-span-6 drop-shadow-cover">
           <ApollonIcon width={200} height={200} />
         </div>
-        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl"></div>
+        <div className="border border-textDark text-textDark text-center row-start-7 row-span-3 col-start-13 col-span-4 rounded-xl drop-shadow-cover bg-linear-gradient"></div>
         <button
-          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center"
+          className="border border-textDark text-textDark text-center row-start-13 row-span-3 col-start-2 col-span-5 flex flex-col rounded-xl justify-center items-center drop-shadow-cover bg-linear-gradient"
           onClick={() => router.push("/about")}
         >
-          <QuestionMarkCircle className="w-6 h-6" />
+          <QuestionMarkCircleIcon className="w-6 h-6" />
           About
         </button>
         <button
-          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center"
+          className="border border-textDark text-textDark text-center row-start-12 row-span-5 col-start-9 col-span-8 flex flex-col rounded-xl items-center justify-center drop-shadow-cover bg-linear-gradient"
           onClick={() => router.push("https://github.com/Take434/Apollon")}
         >
           <GithubIcon className="w-14 h-14" />
           <span className="flex">
-            View the code <ExternalLink className="w-4 h-4 my-auto" />
+            View the code{" "}
+            <ArrowTopRightOnSquareIcon className="w-4 h-4 my-auto ml-2" />
           </span>
         </button>
       </div>
