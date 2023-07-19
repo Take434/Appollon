@@ -1,12 +1,7 @@
 services:
-  my-sql:
-    image: mysql:8
-    environment:
-      - MYSQL_ROOT_PASSWORD=apollon
-      - MYSQL_DATABASE=apollon
-      - MYSQL_USER=apollon
-      - MYSQL_PASSWORD=apollon
-    volumes:
-      - ./data:/var/lib/mysql
+  appollon:
+    image: appollon
+    env_file: .env
     ports:
-      - 3306:3306
+      - "3000:3000"
+    
