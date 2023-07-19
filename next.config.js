@@ -6,8 +6,7 @@ const nextConfig = {
   },
   images: {
     domains: ["i.scdn.co", "wiki.dave.eu"]
-  }, 
-  output: "standalone",
+  },
 }
 
 module.exports = nextConfig
