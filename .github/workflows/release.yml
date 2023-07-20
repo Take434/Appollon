@@ -128,7 +128,7 @@ jobs:
           registry-password: ${{ secrets.GITHUB_TOKEN }}
           name: appollon
           location: 'germanywestcentral'
-          environment-variables: ${{ secrets.SPOTIFY_CLIENT_ID }} ${{ secrets.SPOTIFY_CLIENT_SECRET }} ${{ secrets.SPOTIFY_REDIRECT_URI }} ${{ secrets.DATABASE_URL }} ${{ secrets.SPOTIFY_SCOPE }}
+          environment-variables: "SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }} SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} SPOTIFY_REDIRECT_URI=${{ secrets.SPOTIFY_REDIRECT_URI }} DATABASE_URL=${{ secrets.DATABASE_URL }} SPOTIFY_SCOPE=${{ secrets.SPOTIFY_SCOPE }}"
 
 
       # - name: Run Azure CLI script to create ACI
