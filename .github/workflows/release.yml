@@ -141,7 +141,7 @@ jobs:
             # Check if the container with the specified name already exists
             if az container show --resource-group apollon --name appollon &> /dev/null; then
                 # Update the existing container with the new image
-                az container update --resource-group apollon --name appollon --image ghcr.io/take434/appollon:latest
+                az container restart
             else
                 # Create a new container with the specified image
                 az container create --resource-group apollon --name appollon --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 80
