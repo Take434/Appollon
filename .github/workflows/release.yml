@@ -144,5 +144,5 @@ jobs:
                 az container restart
             else
                 # Create a new container with the specified image
-                az container create --resource-group apollon --name appollon --registry-login-server ghcr.io --registry-username ${{ github.actor }} --registry-password ${{ secrets.GITHUB_TOKEN }} --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 80
+                az container create --resource-group apollon --name appollon --registry-login-server ghcr.io --registry-username ${{ github.actor }} --registry-password ${{ secrets.GITHUB_TOKEN }} --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 3000 --dns-name-label apollon${{ github.run_number }} --location germanywestcentral --environment-variables SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }} SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} SPOTIFY_REDIRECT_URI=${{ secrets.SPOTIFY_REDIRECT_URI }} DATABASE_URL=${{ secrets.DATABASE_URL }} SPOTIFY_SCOPE=${{ secrets.SPOTIFY_SCOPE }}
             fi
