@@ -144,5 +144,5 @@ jobs:
                 az container restart
             else
                 # Create a new container with the specified image
-                az container create --resource-group apollon --name appollon --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 80
+                az container create --resource-group apollon --name appollon --registry-login-server ghcr.io --registry-username ${{ github.actor }} --registry-password ${{ secrets.GITHUB_TOKEN }} --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 80
             fi
