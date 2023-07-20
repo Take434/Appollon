@@ -2,10 +2,13 @@ name: Release
 on: 
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    if: ${{ github.event_name == 'release' }}
 
     permissions:
       contents: read
@@ -83,3 +86,54 @@ jobs:
         env:
           OWNER: ${{ github.repository_owner }}
           VERSION: latest
+
+## end of Build Job ##
+
+  deploy-to-azure: 
+    needs: 
+      - build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+      packages: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+      - name: 'Deploy to Azure Container Instances'
+        uses: 'azure/aci-deploy@v1'
+        with:
+          resource-group: apollon
+          dns-name-label: apollon${{ github.run_number }}
+          image: ghcr.io/take434/appollon:latest
+          registry-login-server: ghcr.io
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          name: appollon
+          location: 'germany west'
+
+
+      # - name: Run Azure CLI script to create ACI
+      #   uses: azure/CLI@v1
+      #   with:
+      #     azcliversion: latest
+      #     inlineScript: |
+      #       # Check if the container with the specified name already exists
+      #       if az container show --resource-group <resource-group-name> --name <aci-name> &> /dev/null; then
+      #           # Update the existing container with the new image
+      #           az container update --resource-group <resource-group-name> --name <aci-name> --image ghcr.io/<github-username>/<image-name>:<tag>
+      #       else
+      #           # Create a new container with the specified image
+      #           az container create --resource-group <resource-group-name> --name <aci-name> --image ghcr.io/<github-username>/<image-name>:<tag> --cpu <cpu-count> --memory <memory-amount> --ports <port>
+      #       fi
