@@ -117,30 +117,32 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   
-      - name: 'Deploy to Azure Container Instances'
-        uses: 'azure/aci-deploy@v1'
-        with:
-          resource-group: apollon
-          dns-name-label: apollon${{ github.run_number }}
-          image: ghcr.io/take434/appollon:latest
-          registry-login-server: ghcr.io
-          registry-username: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
-          name: appollon
-          location: 'germanywestcentral'
-          environment-variables: "SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }} SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} SPOTIFY_REDIRECT_URI=${{ secrets.SPOTIFY_REDIRECT_URI }} DATABASE_URL=${{ secrets.DATABASE_URL }} SPOTIFY_SCOPE=${{ secrets.SPOTIFY_SCOPE }}"
-
-
-      # - name: Run Azure CLI script to create ACI
-      #   uses: azure/CLI@v1
+      # - name: 'Deploy to Azure Container Instances'
+      #   uses: 'azure/aci-deploy@v1'
       #   with:
-      #     azcliversion: latest
-      #     inlineScript: |
-      #       # Check if the container with the specified name already exists
-      #       if az container show --resource-group <resource-group-name> --name <aci-name> &> /dev/null; then
-      #           # Update the existing container with the new image
-      #           az container update --resource-group <resource-group-name> --name <aci-name> --image ghcr.io/<github-username>/<image-name>:<tag>
-      #       else
-      #           # Create a new container with the specified image
-      #           az container create --resource-group <resource-group-name> --name <aci-name> --image ghcr.io/<github-username>/<image-name>:<tag> --cpu <cpu-count> --memory <memory-amount> --ports <port>
-      #       fi
+      #     resource-group: apollon
+      #     dns-name-label: apollon${{ github.run_number }}
+      #     image: ghcr.io/take434/appollon:latest
+      #     registry-login-server: ghcr.io
+      #     registry-username: ${{ github.actor }}
+      #     registry-password: ${{ secrets.GITHUB_TOKEN }}
+      #     name: appollon
+      #     location: 'germanywestcentral'
+      #     environment-variables: 
+            
+            #"SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }} SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }} SPOTIFY_REDIRECT_URI=${{ secrets.SPOTIFY_REDIRECT_URI }} DATABASE_URL=${{ secrets.DATABASE_URL }} SPOTIFY_SCOPE=${{ secrets.SPOTIFY_SCOPE }}"
+
+
+      - name: Run Azure CLI script to create ACI
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            # Check if the container with the specified name already exists
+            if az container show --resource-group apollon --name appollon &> /dev/null; then
+                # Update the existing container with the new image
+                az container update --resource-group apollon --name appollon --image ghcr.io/take434/appollon:latest
+            else
+                # Create a new container with the specified image
+                az container create --resource-group apollon --name appollon --image ghcr.io/take434/appollon:latest --cpu 1 --memory 1.5 --ports 80
+            fi
