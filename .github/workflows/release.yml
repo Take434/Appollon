@@ -127,7 +127,7 @@ jobs:
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
           name: appollon
-          location: 'germany west'
+          location: 'germanywestcentral'
 
 
       # - name: Run Azure CLI script to create ACI
