@@ -4,6 +4,9 @@ on:
     types: [published]
   workflow_dispatch:
 
+    ## Build Job ##
+    ## only run build job when triggered by release ##
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -88,12 +91,15 @@ jobs:
           VERSION: latest
 
 ## end of Build Job ##
+## always run deploy-to-azure job, even when triggered manually ##
 
   deploy-to-azure: 
     needs: 
       - build
 
     runs-on: ubuntu-latest
+
+    if: ${{ always() }}
 
     permissions:
       contents: read
