@@ -127,7 +127,7 @@ jobs:
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
           name: appollon
-          location: 'germany west'
+          location: 'germanywestcentral'
           environment-variables: ${{ secrets.SPOTIFY_CLIENT_ID }} ${{ secrets.SPOTIFY_CLIENT_SECRET }} ${{ secrets.SPOTIFY_REDIRECT_URI }} ${{ secrets.DATABASE_URL }} ${{ secrets.SPOTIFY_SCOPE }}
 
 
