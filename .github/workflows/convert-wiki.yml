@@ -26,7 +26,7 @@ jobs:
       
       - run: ls
       - run: npm install -g github-wikito-converter
-      - run: gwtc . -o output
+      - run: gwtc ./appollon.wiki -o output
 
 
       - name: upload to artifact
