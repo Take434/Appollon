@@ -23,7 +23,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-        
+      
+      - run: ls
       - run: npm install -g github-wikito-converter
       - run: gwtc . -o output
 
