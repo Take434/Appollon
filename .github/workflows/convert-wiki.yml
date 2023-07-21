@@ -19,17 +19,17 @@ jobs:
           ref: master
           path: 'appollon.wiki'
 
-      - name: create file list
-        id: files_list
-        run: |
-          cd appollon.wiki
-          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+      - name: Install dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+        
+      - run: npm install -g github-wikito-converter
+      - run: gwtc . -o output
 
-      - uses: docker://pandoc/latex:2.9
-        with: 
-          args: --output=output/result.pdf ${{ steps.files_list.outputs.files }}
 
-      - uses: actions/upload-artifact@v2
+      - name: upload to artifact
+        uses: actions/upload-artifact@v2
         with:
           name: output
           path: output
