@@ -37,6 +37,7 @@ jobs:
       - name: convert to pdf
         uses: docker://pandoc/latex:2.9
         with:
+          run: cd appollon.wiki
           args: --output=output/result.pdf ${{ steps.files_list.outputs.files }}
 
       - name: upload to artifact
