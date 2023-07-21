@@ -28,12 +28,11 @@ jobs:
       # - run: npm install -g github-wikito-converter
       # - run: gwtc ./appollon.wiki -o output
 
-      - name: create file list
-        id: files_list
-        working-directory: appollon.wiki
-        run: |
-          cd appollon.wiki
-          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+      # - name: create file list
+      #   id: files_list
+      #   working-directory: appollon.wiki
+      #   run: |
+      #     echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
 
       - name: convert to pdf
         uses: docker://pandoc/latex:2.9
