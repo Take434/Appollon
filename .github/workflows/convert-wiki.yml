@@ -38,7 +38,7 @@ jobs:
         uses: docker://pandoc/latex:2.9
         with:
           entrypoint: /bin/sh
-          args: -c "mkdir output; find ./ -iname '*.md' -type f -exec sh -c 'pandoc ${0} -o output/${0%.md}.pdf' {} \;"
+          args: -c "mkdir output; find ./appollon.wiki -iname '*.md' -type f -exec sh -c 'pandoc ${0} -o output/${0%.md}.pdf --pdf-engine=xelatex' {} \;"
 
       - name: upload to artifact
         uses: actions/upload-artifact@v2
