@@ -10,24 +10,34 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cheackout wiki
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: 'take434/appollon.wiki'
           ref: master
           path: 'appollon.wiki'
 
-      - name: Install dependencies
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+      # - name: Install dependencies
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '20'
       
-      - run: find ./appollon.wiki
-      - run: npm install -g github-wikito-converter
-      - run: gwtc ./appollon.wiki -o output
+      # - run: find ./appollon.wiki
+      # - run: npm install -g github-wikito-converter
+      # - run: gwtc ./appollon.wiki -o output
 
+      - name: create file list
+        id: files_list
+        run: |
+          cd appollon.wiki
+          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+
+      - name: convert to pdf
+        uses: docker://pandoc/latex:2.9
+        with:
+          args: --output=output/result.pdf ${{ steps.files_list.outputs.files }}
 
       - name: upload to artifact
         uses: actions/upload-artifact@v2
