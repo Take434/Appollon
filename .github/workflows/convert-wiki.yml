@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '20'
       
-      - run: ls
+      - run: find ./appollon.wiki
       - run: npm install -g github-wikito-converter
       - run: gwtc ./appollon.wiki -o output
 
