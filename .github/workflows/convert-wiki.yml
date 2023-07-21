@@ -1,0 +1,35 @@
+name: wiki-to-pdf
+
+on:
+  gollum:
+  workflow_dispatch:
+
+jobs:
+  convert-wiki:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Cheackout wiki
+        uses: actions/checkout@v2
+        with:
+          repository: 'take434/appollon.wiki'
+          ref: master
+          path: 'appollon.wiki'
+
+      - name: create file list
+        id: files_list
+        run: |
+          cd appollon.wiki
+          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+
+      - uses: docker://pandoc/latex:2.9
+        with: 
+          args: --output=output/result.pdf ${{ steps.files_list.outputs.files }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: output
+          path: output
