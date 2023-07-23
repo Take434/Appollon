@@ -22,7 +22,11 @@ export const playlistPreview = async () => {
       token: token,
     },
     include: {
-      playlists: true,
+      playlists: {
+        include: {
+          tracks: true,
+        }
+      },
     },
   });
 
@@ -33,11 +37,6 @@ export const playlistPreview = async () => {
 
   const playlists: Playlist[] = [];
 
-  if (currentUser.playlists.length > 0) {
-    console.log("getting from db");
-
-    playlists.push(...currentUser.playlists);
-  } else {
     console.log("getting from api");
 
     const apiPlaylists = await spotifyRequestWrapper(getPlaylistsForUser);
@@ -106,7 +105,7 @@ export const playlistPreview = async () => {
     });
 
     playlists.push(...apiPlaylists);
-  }
+  
 
   for (let i = 0; i < playlists.length; i++) {
     await setTimeout(2000);

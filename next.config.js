@@ -5,7 +5,12 @@ const nextConfig = {
     serverActions: true
   },
   images: {
-    domains: ["i.scdn.co", "wiki.dave.eu"]
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: "**",
+      }
+    ],
   },
   output: "standalone",
 }

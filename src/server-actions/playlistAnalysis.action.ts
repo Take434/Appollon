@@ -54,7 +54,7 @@ export const playlistAnalysis2 = async (playlistId: string) => {
     },
     instrumentalness: {
       data: [],
-      scale: [0, 0.02, 0.04, 0.08, 0.1],
+      scale: [0, 0.25, 0.5, 0.75, 1],
     },
     loudness: {
       data: [],
