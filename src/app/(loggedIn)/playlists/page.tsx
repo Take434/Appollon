@@ -52,7 +52,10 @@ export default function PlaylistOverview() {
         <p>Select a playlist to analyse it</p>
       </div>
       <div className="flex flex-col mx-auto mt-3 text-textDark w-4/6 mb-20">
-        <button className="border border-textDark rounded-xl px-2 py-1" onClick={() => handlePlaylistClick()}>
+        <button
+          className="border border-textDark rounded-xl px-2 py-1"
+          onClick={() => handlePlaylistClick()}
+        >
           query my spotify playlists
         </button>
         {playlists.map((playlist) => (
@@ -69,7 +72,9 @@ export default function PlaylistOverview() {
               className="rounded-xl drop-shadow-cover absolute ml-3 -mt-10"
             />
             <div className="ml-32 pr-2">
-              <h1 className="truncate">{playlist.title ? playlist.title : "unnamed Playlist"}</h1>
+              <h1 className="truncate">
+                {playlist.title ? playlist.title : "unnamed Playlist"}
+              </h1>
               <p>{playlist.tracks.length} songs</p>
               <p className="truncate">Creator: {playlist.creatorName}</p>
             </div>

@@ -25,7 +25,7 @@ export const playlistPreview = async () => {
       playlists: {
         include: {
           tracks: true,
-        }
+        },
       },
     },
   });
@@ -37,75 +37,74 @@ export const playlistPreview = async () => {
 
   const playlists: Playlist[] = [];
 
-    console.log("getting from api");
+  console.log("getting from api");
 
-    const apiPlaylists = await spotifyRequestWrapper(getPlaylistsForUser);
+  const apiPlaylists = await spotifyRequestWrapper(getPlaylistsForUser);
 
-    if (apiPlaylists === "No token found") {
-      console.log("No token found");
-      return;
+  if (apiPlaylists === "No token found") {
+    console.log("No token found");
+    return;
+  }
+
+  if (!apiPlaylists) {
+    console.log("No playlists found");
+    return;
+  }
+
+  const playlistsToCreate: Playlist[] = [];
+  const playlistsToUpdate: Playlist[] = [];
+
+  const playlistsInDb = await prisma.playlist.findMany({
+    include: {
+      followers: true,
+    },
+  });
+
+  apiPlaylists.forEach((apiP) => {
+    const found = playlistsInDb.find((dbP) => dbP.id === apiP.id);
+    if (found) {
+      const newFollowers: User[] = found.followers.concat([currentUser]);
+      const newPlaylist: Playlist = {
+        coverLink: found.coverLink,
+        creatorName: found.creatorName,
+        id: found.id,
+        title: found.title,
+        audio_FeaturesId: null,
+      };
+      playlistsToUpdate.push(newPlaylist);
+    } else {
+      const newPlaylist: Playlist = {
+        coverLink: apiP.coverLink,
+        creatorName: apiP.creatorName,
+        id: apiP.id,
+        title: apiP.title,
+        audio_FeaturesId: null,
+      };
+      playlistsToCreate.push(newPlaylist);
     }
+  });
 
-    if (!apiPlaylists) {
-      console.log("No playlists found");
-      return;
-    }
+  const createPlaylists = await prisma.playlist.createMany({
+    data: playlistsToCreate,
+  });
 
-    const playlistsToCreate: Playlist[] = [];
-    const playlistsToUpdate: Playlist[] = [];
-
-    const playlistsInDb = await prisma.playlist.findMany({
-      include: {
-        followers: true,
+  const updatePlaylists = await prisma.user.update({
+    where: {
+      id: currentUser.id,
+    },
+    data: {
+      playlists: {
+        connect: playlistsToUpdate
+          .concat(playlistsToCreate)
+          .map((item) => ({ id: item.id })),
       },
-    });
+    },
+    include: {
+      playlists: true,
+    },
+  });
 
-    apiPlaylists.forEach((apiP) => {
-      const found = playlistsInDb.find((dbP) => dbP.id === apiP.id);
-      if (found) {
-        const newFollowers: User[] = found.followers.concat([currentUser]);
-        const newPlaylist: Playlist = {
-          coverLink: found.coverLink,
-          creatorName: found.creatorName,
-          id: found.id,
-          title: found.title,
-          audio_FeaturesId: null,
-        };
-        playlistsToUpdate.push(newPlaylist);
-      } else {
-        const newPlaylist: Playlist = {
-          coverLink: apiP.coverLink,
-          creatorName: apiP.creatorName,
-          id: apiP.id,
-          title: apiP.title,
-          audio_FeaturesId: null,
-        };
-        playlistsToCreate.push(newPlaylist);
-      }
-    });
-
-    const createPlaylists = await prisma.playlist.createMany({
-      data: playlistsToCreate,
-    });
-
-    const updatePlaylists = await prisma.user.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        playlists: {
-          connect: playlistsToUpdate
-            .concat(playlistsToCreate)
-            .map((item) => ({ id: item.id })),
-        },
-      },
-      include: {
-        playlists: true,
-      },
-    });
-
-    playlists.push(...apiPlaylists);
-  
+  playlists.push(...apiPlaylists);
 
   for (let i = 0; i < playlists.length; i++) {
     await setTimeout(2000);

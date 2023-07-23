@@ -109,7 +109,7 @@ export async function GET(request: Request) {
     });
   }
 
-  const answ = NextResponse.redirect(`https://${ process.env.VERCEL_URL }/home`);
+  const answ = NextResponse.redirect(`https://${process.env.VERCEL_URL}/home`);
 
   const cookie = answ.cookies.get("token");
 

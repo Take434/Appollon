@@ -16,8 +16,8 @@ export const getUsersPalylistFromDB = async () => {
       playlists: {
         include: {
           tracks: true,
-        }
-      }
+        },
+      },
     },
   });
 
