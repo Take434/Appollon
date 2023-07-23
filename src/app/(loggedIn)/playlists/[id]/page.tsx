@@ -17,7 +17,7 @@ export default function Playlist({ params }: { params: { id: string } }) {
   }, [params.id]);
 
   return (
-    <>
+    <div className="mb-20">
       {boxplotData &&
         boxplotData.map((data, i) => (
           <div key={i} className="text-textDark mt-3">
@@ -35,7 +35,7 @@ export default function Playlist({ params }: { params: { id: string } }) {
             />
           </div>
         ))}
-    </>
+    </div>
   );
 }
 

@@ -214,7 +214,7 @@ export const createArtistsForTracks = async (
     const found = artistsForGenres?.find((item) => item.id === artist.id);
     return {
       ...artist,
-      genres: found!.genres?.join(",") ?? "",
+      genres: found?.genres?.join(",") ?? "",
     } as Prisma.ArtistCreateManyInput;
   });
 

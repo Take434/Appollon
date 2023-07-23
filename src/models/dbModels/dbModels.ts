@@ -1,7 +1,7 @@
 import { Playlist, Track, User } from "@prisma/client";
 
 export type PlaylistWithTracks = Playlist & {
-  tracks: Track;
+  tracks: Track[];
 };
 
 export type UserWithPlaylists = User & {

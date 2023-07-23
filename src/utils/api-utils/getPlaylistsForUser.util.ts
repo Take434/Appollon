@@ -106,7 +106,7 @@ export const getPlaylistsForUser = async () => {
   }
 
   const savedTracksPlaylist: Playlist = {
-    coverLink: "temp",
+    coverLink: "https://loremflickr.com/400/400",
     creatorName: currentUser.name,
     id: "SAVEDTRACKS_" + currentUser.id,
     title: "Saved Tracks",
