@@ -40,9 +40,6 @@ jobs:
           entrypoint: /bin/sh
           args: -c "mkdir output;for d in */; do mkdir output/$d; done;find ./appollon.wiki -iname '*.md' -type f -exec sh -c 'pandoc ${0} -o output/${0%.md}.pdf --pdf-engine=xelatex' {} \;find ./appollon.wiki -iname '*.png' -type f -exec cp --parents {} output/ \;find ./appollon.wiki -iname '*.svg' -type f -exec cp --parents {} output/ \;"
 
-      - name: copy images to output
-        run: cp -r appollon.wiki/images output/images
-
       - name: upload to artifact
         uses: actions/upload-artifact@v2
         with:
