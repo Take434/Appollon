@@ -145,7 +145,6 @@ export const BoxPlotWithoutPopover = (props: StylingProps & DataProps) => {
     props.svgWidth,
     props.svgHeight
   );
-  console.log(stats);
   return <BoxPlot {...{ ...stats, ...props }} />;
 };
 
