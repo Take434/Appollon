@@ -22,11 +22,11 @@ export const getUsersPlaylistFromDB = async () => {
           audio_FeaturesId: true,
           _count: {
             select: {
-               tracks: true,
-            }
-          }
-        }
-      }
+              tracks: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -34,7 +34,7 @@ export const getUsersPlaylistFromDB = async () => {
     return "No user found";
   }
 
-  return user.playlists.map(p => {
+  return user.playlists.map((p) => {
     return {
       id: p.id,
       title: p.title,
@@ -42,7 +42,7 @@ export const getUsersPlaylistFromDB = async () => {
       coverLink: p.coverLink,
       audio_FeaturesId: p.audio_FeaturesId,
       trackCount: p._count.tracks,
-    }
+    };
   });
 };
 
@@ -50,7 +50,7 @@ export const getPlaylistInfowithId = async (id: string) => {
   const prisma = getClient();
 
   const token = cookies().get("token")?.value;
-  
+
   if (!token) {
     return;
   }
@@ -68,9 +68,9 @@ export const getPlaylistInfowithId = async (id: string) => {
       _count: {
         select: {
           tracks: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   if (!playlist) {

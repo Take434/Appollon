@@ -9,7 +9,9 @@ import { LoadingComponent } from "@/components/loading";
 import { Playlist } from "@prisma/client";
 
 export default function PlaylistOverview() {
-  const [playlists, setPlaylists] = React.useState<(Playlist & { trackCount: number })[]>([]);
+  const [playlists, setPlaylists] = React.useState<
+    (Playlist & { trackCount: number })[]
+  >([]);
   const router = useRouter();
 
   const getPlaylists = async () => {

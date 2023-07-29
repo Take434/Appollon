@@ -9,7 +9,10 @@ export default function PersonalStats() {
   return (
     <div className="text-textDark flex flex-col items-center justify-center px-2">
       <h1 className="text-3xl">Personal Stats</h1>
-      <p>This is currently only demoing the boxplot components and not actually displaying user data</p>
+      <p>
+        This is currently only demoing the boxplot components and not actually
+        displaying user data
+      </p>
       <div className="mt-20 grid grid-cols-1 gap-5">
         <BoxPlotWithoutPopover
           data={[

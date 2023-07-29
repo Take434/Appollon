@@ -8,7 +8,6 @@ export default function LoggedInLayout({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-
   return (
     <>
       <Header />
