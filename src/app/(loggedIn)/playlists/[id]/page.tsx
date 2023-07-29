@@ -58,7 +58,7 @@ export default function PlaylistDetail({ params }: { params: { id: string } }) {
               />
             </div>
             <div className="text-textDark flex flex-col items-start ml-5 w-2/3">
-              <p className="text-xl truncate w-full">{playlistData.title}</p>
+              <p className="text-xl truncate w-full">{playlistData.title === "" ? "Unnamed Playlist" : playlistData.title}</p>
               <p className="truncate w-full">{playlistData.trackCount} tracks</p>
               <p className="truncate w-full">creator: {playlistData.creatorName}</p>
             </div>

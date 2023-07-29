@@ -8,14 +8,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { usePathname } from "next/navigation";
 
-type NavbarProps = {
-  currentPage: string;
-  setCurretPage: (page: string) => void;
-};
-
-export const Navbar = ({ currentPage, setCurretPage }: NavbarProps) => {
+export const Navbar = () => {
   const { push } = useRouter();
+  const currentPage = usePathname();
 
   const pages = [
     {
@@ -57,7 +54,6 @@ export const Navbar = ({ currentPage, setCurretPage }: NavbarProps) => {
                   className="p-1 rounded-full text-textDark"
                   onClick={() => {
                     push(p.url);
-                    setCurretPage(p.url);
                   }}
                 >
                   {p.icon}

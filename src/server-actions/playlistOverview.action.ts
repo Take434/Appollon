@@ -3,7 +3,7 @@
 import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
 
-export const getUsersPalylistFromDB = async () => {
+export const getUsersPlaylistFromDB = async () => {
   const prisma = getClient();
 
   const token = cookies().get("token")?.value;

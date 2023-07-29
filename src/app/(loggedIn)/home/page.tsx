@@ -32,38 +32,41 @@ export default function Welcome() {
       setProfileData(data as UserWithPlaylists);
     });
 
+    const chartColors = [
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-800"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-700"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-600"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-500"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-400"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-300"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-200"
+      ),
+      getComputedStyle(document.body).getPropertyValue(
+        "--color-secondary-100"
+      ),
+    ];
+  
     setUserStats({
       labels: ["Metal", "Alternative Rock", "J-Rock", "Funk", "Post-Punk"],
       datasets: [
         {
           label: "# of Songs",
           data: [20, 17, 10, 8, 5],
-          backgroundColor: [
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-800"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-700"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-600"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-500"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-400"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-300"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-200"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-100"
-            ),
-          ],
+          backgroundColor: chartColors,
+          hoverBackgroundColor: chartColors,
           borderColor: [
             getComputedStyle(document.body).getPropertyValue(
               "--color-text-dark"
@@ -104,7 +107,7 @@ export default function Welcome() {
             src={
               profileData.pfpLink
                 ? profileData.pfpLink
-                : "/images/placeholder.png"
+                : "/placeholder.png"
             }
             alt="the users profile picture"
             width={150}
