@@ -35,12 +35,14 @@ jobs:
       #     echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
 
       - run: cd appollon.wiki && bash ../.github/concat-wiki.sh
+      - run: cp -r appollon.wiki/images appollon.wiki/output/images
 
-      # - name: convert to pdf
-      #   uses: docker://pandoc/latex:2.9
-      #   with:
-      #     entrypoint: /bin/sh
-      #     args: -c "mkdir output;for d in */; do mkdir output/$d; done;find ./appollon.wiki -iname '*.md' -type f -exec sh -c 'pandoc ${0} -o output/${0%.md}.pdf --pdf-engine=xelatex' {} \;find ./appollon.wiki -iname '*.png' -type f -exec cp --parents {} output/ \;find ./appollon.wiki -iname '*.svg' -type f -exec cp --parents {} output/ \;"
+      - name: convert to pdf
+        uses: docker://pandoc/latex:2.9
+        with:
+          entrypoint: /bin/sh
+          # args: -c "mkdir output;for d in */; do mkdir output/$d; done;find ./appollon.wiki -iname '*.md' -type f -exec sh -c 'pandoc ${0} -o output/${0%.md}.pdf --pdf-engine=xelatex' {} \;find ./appollon.wiki -iname '*.png' -type f -exec cp --parents {} output/ \;find ./appollon.wiki -iname '*.svg' -type f -exec cp --parents {} output/ \;"
+          args: -c "pandoc appollon.wiki/output/merged.md -o appollon.wiki/output/merged.pdf --pdf-engine=xelatex"
 
       - name: upload to artifact
         uses: actions/upload-artifact@v2

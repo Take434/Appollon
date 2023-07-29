@@ -31,8 +31,8 @@ cat _Sidebar.md | while read l; do
 
 		echo >> output/merged.md
 
-		if [[ $l == "home" ]]; then
-			echo "# home" >> output/merged.md
+		if [[ $l == "Home" ]]; then
+			echo "# Home" >> output/merged.md
 			tail -n +6 $p >> output/merged.md
 		else
 			cat $p >> output/merged.md
