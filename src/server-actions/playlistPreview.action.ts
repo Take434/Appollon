@@ -4,11 +4,11 @@ import { Playlist, User } from "@prisma/client";
 import { getPlaylistsForUser } from "../utils/api-utils/getPlaylistsForUser.util";
 import { getClient } from "@/prismaClient";
 import { cookies } from "next/headers";
-import { addCompletePlaylistToDb } from "@/utils/getTracks.util";
 import { spotifyRequestWrapper } from "@/utils/spotifyUtils";
-import { setTimeout } from "timers/promises";
+import { addCompletePlaylistToDb } from "@/utils/getTracks.util";
 
 export const playlistPreview = async () => {
+  const time = Date.now();
   const prisma = getClient();
 
   const token = cookies().get("token")?.value;
@@ -106,12 +106,18 @@ export const playlistPreview = async () => {
 
   playlists.push(...apiPlaylists);
 
-  for (let i = 0; i < playlists.length; i++) {
-    await setTimeout(2000);
-    console.log(`${i * 2 + 2} seconds have passed!`);
-
-    await spotifyRequestWrapper(() => addCompletePlaylistToDb(playlists[i].id));
-  }
-
+  console.log("done in ", Date.now() - time);
   return playlists;
+};
+
+export const addCompletePlaylistToDbAction = async (id: string) => {
+  const time = Date.now();
+  try {
+    await spotifyRequestWrapper(() => addCompletePlaylistToDb(id));
+    console.log("done in ", Date.now() - time);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };

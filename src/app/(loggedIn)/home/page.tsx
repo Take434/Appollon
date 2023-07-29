@@ -9,15 +9,15 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import { SmallPlaylistPreview } from "@/app/(loggedIn)/home/SmallPlaylistPreview";
 import { getUserData } from "@/server-actions/getUserData.action";
-import { UserWithPlaylists } from "@/models/dbModels/dbModels";
 import { LoadingComponent } from "@/components/loading";
+import { Playlist, User } from "@prisma/client";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Welcome() {
-  const [profileData, setProfileData] = useState<UserWithPlaylists | null>(
-    null
-  );
+  const [profileData, setProfileData] = useState<
+    (User & { playlists: Playlist[] }) | null
+  >(null);
   const [userStats, setUserStats] = useState<any>(null); //TODO: [z.infer<typeof userStatsSchema>]
   const [userPlaylists, setUserPlaylists] = useState<any>(null); // TODO: [z.infer<typeof playlistSchema>
   const { push } = useRouter();
@@ -29,41 +29,28 @@ export default function Welcome() {
         push("/login");
         return;
       }
-      setProfileData(data as UserWithPlaylists);
+      setProfileData(data as User & { playlists: Playlist[] });
     });
+
+    const chartColors = [
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-800"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-700"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-600"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-500"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-400"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-300"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-200"),
+      getComputedStyle(document.body).getPropertyValue("--color-secondary-100"),
+    ];
 
     setUserStats({
       labels: ["Metal", "Alternative Rock", "J-Rock", "Funk", "Post-Punk"],
       datasets: [
         {
-          label: "# of Votes",
+          label: "# of Songs",
           data: [20, 17, 10, 8, 5],
-          backgroundColor: [
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-800"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-700"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-600"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-500"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-400"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-300"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-200"
-            ),
-            getComputedStyle(document.body).getPropertyValue(
-              "--color-secondary-100"
-            ),
-          ],
+          backgroundColor: chartColors,
+          hoverBackgroundColor: chartColors,
           borderColor: [
             getComputedStyle(document.body).getPropertyValue(
               "--color-text-dark"
@@ -101,11 +88,7 @@ export default function Welcome() {
       {profileData ? (
         <>
           <Image
-            src={
-              profileData.pfpLink
-                ? profileData.pfpLink
-                : "/images/placeholder.png"
-            }
+            src={profileData.pfpLink ? profileData.pfpLink : "/placeholder.png"}
             alt="the users profile picture"
             width={150}
             height={150}
