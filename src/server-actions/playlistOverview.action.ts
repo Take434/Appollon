@@ -14,10 +14,19 @@ export const getUsersPalylistFromDB = async () => {
     },
     include: {
       playlists: {
-        include: {
-          tracks: true,
-        },
-      },
+        select: {
+          id: true,
+          title: true,
+          creatorName: true,
+          coverLink: true,
+          audio_FeaturesId: true,
+          _count: {
+            select: {
+               tracks: true,
+            }
+          }
+        }
+      }
     },
   });
 
@@ -25,5 +34,55 @@ export const getUsersPalylistFromDB = async () => {
     return "No user found";
   }
 
-  return user.playlists;
+  return user.playlists.map(p => {
+    return {
+      id: p.id,
+      title: p.title,
+      creatorName: p.creatorName,
+      coverLink: p.coverLink,
+      audio_FeaturesId: p.audio_FeaturesId,
+      trackCount: p._count.tracks,
+    }
+  });
+};
+
+export const getPlaylistInfowithId = async (id: string) => {
+  const prisma = getClient();
+
+  const token = cookies().get("token")?.value;
+  
+  if (!token) {
+    return;
+  }
+
+  const playlist = await prisma.playlist.findFirst({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      title: true,
+      creatorName: true,
+      coverLink: true,
+      audio_FeaturesId: true,
+      _count: {
+        select: {
+          tracks: true,
+        }
+      }
+    }
+  });
+
+  if (!playlist) {
+    return;
+  }
+
+  return {
+    id: playlist.id,
+    title: playlist.title,
+    creatorName: playlist.creatorName,
+    coverLink: playlist.coverLink,
+    audio_FeaturesId: playlist.audio_FeaturesId,
+    trackCount: playlist._count.tracks,
+  };
 };

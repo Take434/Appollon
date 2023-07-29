@@ -36,7 +36,7 @@ export default function Welcome() {
       labels: ["Metal", "Alternative Rock", "J-Rock", "Funk", "Post-Punk"],
       datasets: [
         {
-          label: "# of Votes",
+          label: "# of Songs",
           data: [20, 17, 10, 8, 5],
           backgroundColor: [
             getComputedStyle(document.body).getPropertyValue(

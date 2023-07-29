@@ -4,12 +4,12 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { getUsersPalylistFromDB } from "../../../server-actions/playlistOverview.action";
 import { useRouter } from "next/navigation";
-import { PlaylistWithTracks } from "@/models/dbModels/dbModels";
 import { playlistPreview } from "@/server-actions/playlistPreview.action";
 import { LoadingComponent } from "@/components/loading";
+import { Playlist } from "@prisma/client";
 
 export default function PlaylistOverview() {
-  const [playlists, setPlaylists] = React.useState<PlaylistWithTracks[]>([]);
+  const [playlists, setPlaylists] = React.useState<(Playlist & { trackCount: number })[]>([]);
   const router = useRouter();
 
   const getPlaylists = async () => {
@@ -75,7 +75,7 @@ export default function PlaylistOverview() {
               <h1 className="truncate">
                 {playlist.title ? playlist.title : "unnamed Playlist"}
               </h1>
-              <p>{playlist.tracks.length} songs</p>
+              <p>{playlist.trackCount} songs</p>
               <p className="truncate">Creator: {playlist.creatorName}</p>
             </div>
           </div>

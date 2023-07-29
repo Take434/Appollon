@@ -2,4 +2,4 @@
 -- the command is:
 -- pnpx prisma db execute --file drop.sql
 
-DROP DATABASE apollondb;
+DROP DATABASE apollon;

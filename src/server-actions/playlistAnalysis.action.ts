@@ -37,7 +37,7 @@ export const playlistAnalysis = async (playlistId: string) => {
 export const playlistAnalysis2 = async (playlistId: string) => {
   const audioFeatures = await getAudioFeaturesForPlaylist(playlistId);
 
-  if (!audioFeatures) {
+  if (!audioFeatures || audioFeatures.length === 0) {
     return;
   }
 
