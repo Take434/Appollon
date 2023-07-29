@@ -19,13 +19,9 @@ cat _Sidebar.md | while read l; do
 	l=${l#*(}
 	l=${l%)*}
 
-	echo "now converting $l"
-
 	p="./${l//%20/\\ }.md"
 
-	echo "changed to $p"
-
-	if test -f $p; then
+	if test -f "${p}"; then
 		echo "- [$l](#$l)" >> output/toc.md
 
 		if [[ $(head $p -n1) != "# ${l//%20/ }" ]]; then
