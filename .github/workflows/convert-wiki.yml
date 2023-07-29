@@ -34,7 +34,7 @@ jobs:
       #   run: |
       #     echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
 
-      - run: cd appollon.wiki && bash .github/concat-wiki.sh
+      - run: cd appollon.wiki && bash ../.github/concat-wiki.sh
 
       # - name: convert to pdf
       #   uses: docker://pandoc/latex:2.9
