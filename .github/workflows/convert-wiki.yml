@@ -34,7 +34,7 @@ jobs:
       #   run: |
       #     echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
 
-      - run: ls -a
+      - run: cd appollon.wiki
       - run: bash .github/concat-wiki.sh
 
       # - name: convert to pdf
