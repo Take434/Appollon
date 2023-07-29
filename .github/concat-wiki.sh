@@ -19,23 +19,24 @@ cat _Sidebar.md | while read l; do
 	l=${l#*(}
 	l=${l%)*}
 
-	p="./${l//%20/\\ }.md"
+	p="./${l//%20/ }.md"
 
 	if test -f "${p}"; then
 		echo "- [$l](#$l)" >> output/toc.md
 
-		if [[ $(head $p -n1) != "# ${l//%20/ }" ]]; then
-			cat <(echo "# ${l//%20/ }") $p > new_${l//%20/\\ }.md
-			mv new_${l//%20/\\ }.md $p
+		if [[ $(head "${p}" -n1) != "# ${l//%20/ }" ]]; then
+			cat <(echo "# ${l//%20/ }") "${p}" > "new_${l//%20/\ }.md"
+			mv "new_${l//%20/\ }.md" "${p}"
 		fi
 
+		echo >> output/merged.md
 		echo >> output/merged.md
 
 		if [[ $l == "Home" ]]; then
 			echo "# Home" >> output/merged.md
-			tail -n +6 $p >> output/merged.md
+			tail -n +6 "${p}" >> output/merged.md
 		else
-			cat $p >> output/merged.md
+			cat "${p}" >> output/merged.md
 		fi
 	fi
 done
@@ -43,3 +44,4 @@ done
 cat <(cat output/toc.md) output/merged.md > output/new_merged.md
 mv output/new_merged.md output/merged.md
 rm output/toc.md
+
