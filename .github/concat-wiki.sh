@@ -18,6 +18,7 @@ cat _Sidebar.md | while read l; do
 	n=${n%]*}
 	l=${l#*(}
 	l=${l%)*}
+	l=${l//%20/ }
 
 	p="./$l.md"
 
