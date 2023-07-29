@@ -19,14 +19,14 @@ cat _Sidebar.md | while read l; do
 	l=${l#*(}
 	l=${l%)*}
 
-	p="./${l//%20/\ }.md"
+	p="./${l//%20/\\ }.md"
 
 	if test -f $p; then
 		echo "- [$l](#$l)" >> output/toc.md
 
 		if [[ $(head $p -n1) != "# ${l//%20/ }" ]]; then
-			cat <(echo "# ${l//%20/ }") $p > new_${l//%20/\ }.md
-			mv new_${l//%20/\ }.md $p
+			cat <(echo "# ${l//%20/ }") $p > new_${l//%20/\\ }.md
+			mv new_${l//%20/\\ }.md $p
 		fi
 
 		echo >> output/merged.md
