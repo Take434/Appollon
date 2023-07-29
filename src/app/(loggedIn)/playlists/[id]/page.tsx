@@ -9,6 +9,8 @@ import { Playlist } from "@prisma/client";
 import { getPlaylistInfowithId } from "@/server-actions/playlistOverview.action";
 import Image from "next/image";
 import { addCompletePlaylistToDbAction } from "@/server-actions/playlistPreview.action";
+import { useRouter } from "next/navigation";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 export default function PlaylistDetail({ params }: { params: { id: string } }) {
   const [boxplotData, setBoxplotData] = useState<
@@ -18,12 +20,12 @@ export default function PlaylistDetail({ params }: { params: { id: string } }) {
   const [playlistData, setPlaylistData] = useState<
     (Playlist & { trackCount: number }) | null
     >(null);
-  
   const getData = async () => {
     setBoxplotData((await playlistAnalysis2(params.id)) ?? null);
     setPlaylistData((await getPlaylistInfowithId(params.id)) ?? null);
     setTriedQuery(true);
   }
+  const { push } = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -47,6 +49,15 @@ export default function PlaylistDetail({ params }: { params: { id: string } }) {
     <div className="mb-20 px-2 flex flex-col">
       {playlistData && (
         <>
+          <div className="flex text-textDark">
+          <ChevronLeftIcon
+              className="w-6 h-6 text-textDark mr-5"
+              onClick={() => {
+                push("/playlists");
+              }}
+            />
+            <p className="text-xl truncate w-full">{playlistData.title === "" ? "Unnamed Playlist" : playlistData.title}</p>
+          </div>
           <div className="flex border-b border-textDark w-full p-2">
             <div className="w-1/3">
               <Image
@@ -58,16 +69,15 @@ export default function PlaylistDetail({ params }: { params: { id: string } }) {
               />
             </div>
             <div className="text-textDark flex flex-col items-start ml-5 w-2/3">
-              <p className="text-xl truncate w-full">{playlistData.title === "" ? "Unnamed Playlist" : playlistData.title}</p>
               <p className="truncate w-full">{playlistData.trackCount} tracks</p>
               <p className="truncate w-full">creator: {playlistData.creatorName}</p>
+              <button
+              className="text-textDark border border-textDark px-3 py-1 rounded-xl mt-5"
+              onClick={handlePlaylistClick}>
+                (Re)query Songs
+            </button> 
             </div>
           </div>
-          <button
-            className="text-textDark border border-textDark px-3 py-1 mx-auto rounded-xl mt-1"
-            onClick={handlePlaylistClick}>
-            (Re)query Songs
-          </button> 
         </>
       )}
       {
