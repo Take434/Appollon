@@ -35,6 +35,7 @@ export default function PlaylistDetail({ params }: { params: { id: string } }) {
 
   const handlePlaylistClick = async () => {
     setBoxplotData(null);
+    setTriedQuery(false);
     const res = await addCompletePlaylistToDbAction(params.id);
 
     if (!res) {
