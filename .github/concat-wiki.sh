@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir output
 touch output/merged.md
 touch output/toc.md
 
