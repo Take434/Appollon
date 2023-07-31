@@ -18,9 +18,11 @@ Read more about the frameworks an libraries used in the project in this reposito
 ### Requirements
 Node.js is required to run this project.  
 The project was developed using `pnpm`, there is a preinstall script in place, which enforces the usage of `pnpm`.  
+You can use `npm` to install `pnpm`, simply run this command `npm install -g pnpm`.  
 If you are getting build errors, make sure you are using `pnpm`.  
 If you clone this repository make sure to run `pnpm install`.  
 You will also need Docker to setup the database.  
+You can download it [here](https://docs.docker.com/engine/install/).  
 
 ### Spotify Application
 The application will only work if you have a Spotify application set up.  
