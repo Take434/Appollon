@@ -1,9 +1,9 @@
 # Apollon 🎸
 
-This project aims to give users a concise way to view their spotify activities and data.  
+This project aims to give users a concise way to view their Spotify activities and data.  
 It is currently in development and not ready for production use.  
-There is already a [live deployment](https://appollon.vercel.app) of the current state of the project using vercel, as well as plans to deploy to Azure.  
-But due to restrictions of the spotify api it is not usable for users not explicitly added to the spotify application.  
+There is already a [live deployment](https://appollon.vercel.app) of the current state of the project using Vercel, as well as plans to deploy to Azure.  
+But due to restrictions of the Spotify API it is only accessible to users, who are explicitly added to the Spotify application.  
 If you wish to read more about this project, please visit the wiki of this repository.  
 For a detailed setup guide have a look at the [dev setup](#dev-setup) section of this readme.
 
@@ -11,7 +11,7 @@ For a detailed setup guide have a look at the [dev setup](#dev-setup) section of
 ## Tech-Stack
 
 We utilize Next.js with Tailwind. Our Database is implemented via Prisma.  
-Read more about the frameworks an libraries used in thsi project in this repository's wiki.
+Read more about the frameworks an libraries used in the project in this repository's wiki.
 
 ## Dev Setup
 
@@ -23,8 +23,8 @@ If you clone this repository make sure to run `pnpm install`.
 You will also need Docker to setup the database.  
 
 ### Spotify Application
-The application will only work if you have a spotify application set up.  
-For a detailed guide on how to set up a spotify application, visit the [spotify Docs](https://developer.spotify.com/documentation/web-api/tutorials/getting-started).  
+The application will only work if you have a Spotify application set up.  
+For a detailed guide on how to set up a Spotify application, visit the [Spotify Docs](https://developer.spotify.com/documentation/web-api/tutorials/getting-started).  
 After creating the application, fill in the required information in the .env file.
 
 ### Environment Variables
@@ -36,10 +36,10 @@ After creating the application, fill in the required information in the .env fil
   The client secret of your spotify application
 - `SPOTIFY_REDIRECT_URI`  
   The redirect uri, if run locally this should be `http://localhost:3000/spotifycallback`  
-  make sure that the to change this, if you change the port of the dev server
+  make sure to change this, if you change the port of the dev server
 - `SPOTIFY_SCOPE`  
-  The scopes provided to the spotify API when requesting access to a user's data.  
-  In the current development stage, we just added all scopes, because we are still developing features and don't want to add scopes later on. In the future we will only request the scopes we need.
+  The scopes provided to the Spotify API when requesting access to a user's data.  
+  In the current development stage, we just added all scopes, because we are still developing features and don't want to add scopes later on. In the     future we will only request the scopes we need.
 - `DOMAIN`  
   The actual domain of the application, if you run it locally this should be `http://localhost:3000`.  
   Make sure to modify the port, should you change it.
@@ -60,8 +60,3 @@ Another option is to build the application as a docker container. To achieve thi
 - https://docs.docker.com
 - https://www.prisma.io/docs
 - https://developer.spotify.com/documentation/web-api
-
-Libraries used in this project:  
-For a full list review the package.json file.
-- https://github.com/pingdotgg/zact
-- https://github.com/colinhacks/zod
