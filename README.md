@@ -28,6 +28,7 @@ You can download it [here](https://docs.docker.com/engine/install/).
 The application will only work if you have a Spotify application set up.  
 For a detailed guide on how to set up a Spotify application, visit the [Spotify Docs](https://developer.spotify.com/documentation/web-api/tutorials/getting-started).  
 After creating the application, fill in the required information in the .env file.
+It is also necessary to specify the redirect URI in the settings of the Spotify Application you have just created. It should be the same as in the .env.
 
 ### Environment Variables
 - `DATABASE_URL`  
